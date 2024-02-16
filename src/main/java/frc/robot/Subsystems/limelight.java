@@ -12,16 +12,19 @@ public class limelight extends SubsystemBase {
     NetworkTableEntry ta = table.getEntry("ta");
     NetworkTableEntry tv = table.getEntry("tv");
     NetworkTableEntry thor = table.getEntry("thor");
+    NetworkTableEntry tid = table.getEntry("tid");
     double x; 
     double y;
     double area;
     double v;
     double th; 
+    double id; 
 
     public limelight(){
 
     }
 
+    //callable values for other classes
     public double X(){
         return x; 
     }
@@ -37,8 +40,10 @@ public class limelight extends SubsystemBase {
     public double THor(){
         return th; 
     }
+    public double ID(){
+        return id; 
+    }
 
-    
     @Override
     public void periodic(){
         //read values periodically
@@ -46,6 +51,7 @@ public class limelight extends SubsystemBase {
         y = ty.getDouble(0.0);
         v = tv.getDouble(0.0); 
         area = ta.getDouble(0.0);
-        th = thor.getDouble(0.0); 
+        th = thor.getDouble(0.0);
+        id = tid.getDouble(0.0); 
     }
 }
