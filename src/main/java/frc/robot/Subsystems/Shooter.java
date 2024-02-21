@@ -11,7 +11,6 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 public class Shooter extends SubsystemBase {
     //define motors. yeah. 
     private final CANSparkMax shSpark = new CANSparkMax(0,MotorType.kBrushless); 
-    private final TalonFX shIndexer = new TalonFX(0); 
     private final CANSparkMax angleSpark = new CANSparkMax(0,MotorType.kBrushless); 
     //I hope someone else codes the elevator i don't know how to code the pistons and don't want to learn
     //now that I've said that it'll end up being me who does that won't it. sigh. 
@@ -34,11 +33,9 @@ public class Shooter extends SubsystemBase {
         while (shSpark.getEncoder().getVelocity() < 1){
             //just waiting. theres a better command for this isnt there but I do not remember
         }
-        shIndexer.set(ControlMode.PercentOutput, 1);
+        //index command
         //stop after a few seconds? 
-        Commands.waitSeconds(1);
-        shIndexer.set(ControlMode.PercentOutput, 0);
-        Commands.waitSeconds(1);
+        Commands.waitSeconds(2);
         shSpark.set(0); 
          
         
