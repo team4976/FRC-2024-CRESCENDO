@@ -13,12 +13,14 @@ public class limelight extends SubsystemBase {
     NetworkTableEntry tv = table.getEntry("tv");
     NetworkTableEntry thor = table.getEntry("thor");
     NetworkTableEntry tid = table.getEntry("tid");
+    NetworkTableEntry botpose = table.getEntry("botpose");
     double x; 
     double y;
     double area;
     double v;
     double th; 
     double id; 
+    double[] position;
 
     public limelight(){
 
@@ -42,6 +44,9 @@ public class limelight extends SubsystemBase {
     }
     public double ID(){
         return id; 
+    }
+    public double Position(int item){
+        return position[item];
     }
 
     @Override
