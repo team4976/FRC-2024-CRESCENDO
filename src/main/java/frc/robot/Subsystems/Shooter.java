@@ -1,6 +1,9 @@
 package frc.robot.Subsystems;
 
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType; 
@@ -9,28 +12,36 @@ public class Shooter extends SubsystemBase {
     //define motors. yeah. 
     private final CANSparkMax shSpark = new CANSparkMax(0,MotorType.kBrushless); 
     private final TalonFX shIndexer = new TalonFX(0); 
-    private final CANSparkMax aimSpark = new CANSparkMax(0,MotorType.kBrushless); 
-    //define whatever angles the shooter
+    private final CANSparkMax angleSpark = new CANSparkMax(0,MotorType.kBrushless); 
     //I hope someone else codes the elevator i don't know how to code the pistons and don't want to learn
     //now that I've said that it'll end up being me who does that won't it. sigh. 
 
-    //ENCODERS?? its a tuesday problem
-
-    double angle; 
+    double angleEn = 0; 
 
     public Shooter() {
-        
+        angleSpark.getPIDController().setP(0.015); 
     }
 
     public void shAim(double a){
-        //encoder?? ENCODES?? 
-        //point at A value
-        
+        //angleEn =  angleSpark.getEncoder().getPosition(); 
+        angleSpark.getEncoder().setPosition(0); 
+        angleSpark.getPIDController().setReference(a, CANSparkMax.ControlType.kPosition);
     }
     
     public void shoot(){
-        //index
         //shoot
+        shSpark.set(1);
+        while (shSpark.getEncoder().getVelocity() < 1){
+            //just waiting. theres a better command for this isnt there but I do not remember
+        }
+        shIndexer.set(ControlMode.PercentOutput, 1);
+        //stop after a few seconds? 
+        Commands.waitSeconds(1);
+        shIndexer.set(ControlMode.PercentOutput, 0);
+        Commands.waitSeconds(1);
+        shSpark.set(0); 
+         
+        
     }
 
     

@@ -59,7 +59,7 @@ public class speakerAim extends Command {
                 - pidT.calculate(a_l.X(), hSetpoint), false, true);
             }
             if (botPositioned){
-                a_Shooter.shoot(); 
+                a_Shooter.shoot();
                 isFinished = true; 
             }
         }
