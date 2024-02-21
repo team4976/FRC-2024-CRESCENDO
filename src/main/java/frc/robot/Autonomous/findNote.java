@@ -1,4 +1,4 @@
-package frc.robot.Swerve.commands;
+package frc.robot.Autonomous;
 
 import java.util.List;
 
@@ -15,12 +15,18 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Swerve.Constants;
 import frc.robot.Swerve.Subsystem.Swerve;
+import frc.robot.Subsystems.intake;
 import frc.robot.Subsystems.limelight;
 
 public class findNote extends Command{
-    private boolean isFinished;
     private double[] horPlace = {0.0, 211.625};
     private double verPlace[][] = {{0.0, 57.0, 114.0}, {0.0, 66.0, 132.0}};
+
+    double diffH;
+    double diffV;
+    int indexH;
+    int indexV;
+    int column;
     // placement in ref to center of field in inches for quick guide, we can f*ck with the numbers later, my brain is soup
     private Swerve a_Swerve; 
     private limelight a_l;
@@ -28,11 +34,11 @@ public class findNote extends Command{
     PIDController pidF = new PIDController(0.015, 0, 0);
     PIDController pidH = new PIDController(0.015, 0, 0); 
 
+    intake runIntake;
     
     @Override
     public void initialize(){
         a_Swerve.teleopToggle(); 
-        isFinished = false;
         pidT.setTolerance(5.0);
         pidF.setTolerance(5.0);
         pidH.setTolerance(5.0); 
@@ -42,15 +48,13 @@ public class findNote extends Command{
     public void execute(){
         // find closest note
         double check = 1000000;
-        int indexH = 0;
-        int indexV = 0;
-        int column;
+
         for (int i = 0; i < horPlace.length; i++){
-            double diff = Math.abs(a_l.Position(0) - horPlace[i]);
-            if (diff < check){
-                check = diff;
-                indexH = i; 
+            diffH = Math.abs(a_l.Position(0) - horPlace[i]);
+            if (diffH < check){
+                check = diffH; 
             }
+            indexH = i;
         }
         if (indexH != 0){// determine which line of notes is closest to our bot's position
             column = 1;
@@ -58,11 +62,11 @@ public class findNote extends Command{
             column = 0;
         }
         for (int i = 0; i < verPlace[column].length; i++){
-            double diff = Math.abs(a_l.Position(1) - verPlace[column][i]);
-            if (diff < check){
-                check = diff;
-                indexV = i;
+            diffV = Math.abs(a_l.Position(1) - verPlace[column][i]);
+            if (diffV < check){
+                check = diffV;
             }
+            indexV = i;
         }
         TrajectoryConfig config = 
             new TrajectoryConfig(
@@ -74,9 +78,10 @@ public class findNote extends Command{
             // Start at the origin facing the +X direction
             new Pose2d(0, 0, new Rotation2d(0)),
             // navigate to a note
-            List.of(new Translation2d(horPlace[indexH], verPlace[column][indexV])),
+            List.of(new Translation2d(diffH, diffV)),
             new Pose2d(0, 0, new Rotation2d(0)),
             config);
+        
     }
 
     public void end(){
@@ -85,6 +90,6 @@ public class findNote extends Command{
 
     @Override
     public boolean isFinished() {
-        return isFinished; 
+        return true; 
     }
 }
