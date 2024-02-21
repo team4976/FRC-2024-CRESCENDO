@@ -40,7 +40,6 @@ public class speakerAim extends Command {
         pidT.setTolerance(5.0);
         pidF.setTolerance(5.0);
         pidH.setTolerance(5.0); 
-        //set shooter to a point we'll just have to determine with trial and error ig 
         speakerTarget = 3; 
         //NOTE: ADD CODE TO DETERMINE WHICH TAG BY ALLIANCE COLOUR LATER
     }
@@ -51,7 +50,10 @@ public class speakerAim extends Command {
             if (a_l.THor() < distMax && a_l.THor() > distMin && a_l.X() < hMax && a_l.X() > hMin){
                 botPositioned = true; 
             }
-            //insert similar gate to make shooter aimed true (provided ll on shooter)
+            if (!shooterAimed){
+                a_Shooter.shAim(0.0);
+                shooterAimed = true; 
+            }
             
             if (!botPositioned){
                 //point at target and drive at it. distances changeable see setpoints
