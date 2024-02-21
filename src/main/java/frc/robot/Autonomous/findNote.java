@@ -34,7 +34,12 @@ public class findNote extends Command{
     PIDController pidF = new PIDController(0.015, 0, 0);
     PIDController pidH = new PIDController(0.015, 0, 0); 
 
-    intake runIntake;
+    intake Intake;
+
+    public void runIntake(intake Intake){
+        this.Intake = Intake;
+        addRequirements(Intake);
+    }
     
     @Override
     public void initialize(){
@@ -81,10 +86,11 @@ public class findNote extends Command{
             List.of(new Translation2d(diffH, diffV)),
             new Pose2d(0, 0, new Rotation2d(0)),
             config);
-        
     }
 
     public void end(){
+        Intake.runIntake();
+        super.initialize();
         a_Swerve.teleopToggle();
     }
 
