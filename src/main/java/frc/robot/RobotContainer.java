@@ -14,11 +14,11 @@ public class RobotContainer {
   intake Intake = new intake ();
   public RobotContainer() {
     configureBindings();
-    new CommandXboxController(0).a().onTrue(new intake_in());
   }
 
   private void configureBindings() {
-    
+    CommandXboxController _primarycontroller = new CommandXboxController(0);
+    CommandXboxController _secondarycontroller = new CommandXboxController(1);
   }
 
   public Command getAutonomousCommand() {
