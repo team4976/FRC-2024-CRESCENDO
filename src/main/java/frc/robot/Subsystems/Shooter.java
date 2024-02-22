@@ -7,14 +7,15 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType; 
+import frc.robot.Subsystems.index; 
 
 public class Shooter extends SubsystemBase {
-    //define motors. yeah. 
+    //define motors. 
+    private final index s_index = new index(); 
     private final CANSparkMax shSpark = new CANSparkMax(0,MotorType.kBrushless); 
     private final CANSparkMax angleSpark = new CANSparkMax(0,MotorType.kBrushless); 
-    //I hope someone else codes the elevator i don't know how to code the pistons and don't want to learn
-    //now that I've said that it'll end up being me who does that won't it. sigh. 
-
+    //elevator
+    
     double angleEn = 0; 
 
     public Shooter() {
@@ -33,7 +34,7 @@ public class Shooter extends SubsystemBase {
         while (shSpark.getEncoder().getVelocity() < 1){
             //just waiting. theres a better command for this isnt there but I do not remember
         }
-        //index command
+        s_index.runIndexOut(); 
         //stop after a few seconds? 
         Commands.waitSeconds(2);
         shSpark.set(0); 
