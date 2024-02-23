@@ -12,7 +12,8 @@ public class index extends SubsystemBase{
     public index(){
 
     }
-
+//the run commands take the note into the pizza box. the rev commands push it out. 
+//"-In" puts the note between the wheels. "-Out" pushes it through when it's already in there
     public void runIndexIn(){
         while (!noteIn){
             indexM.set(ControlMode.PercentOutput, 1);
@@ -25,6 +26,18 @@ public class index extends SubsystemBase{
             indexM.set(ControlMode.PercentOutput, 1);
         }
         //stop when note is not In There
+    }
+
+    public void revIndexIn(){
+        while (!noteIn){
+            indexM.set(ControlMode.PercentOutput, -1);
+        }
+    }
+
+    public void revIndexOut(){
+        while (noteIn){
+            indexM.set(ControlMode.PercentOutput, -1);
+        }
     }
     
     public boolean noteIndexed(){

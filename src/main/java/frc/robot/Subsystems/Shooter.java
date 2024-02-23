@@ -3,8 +3,6 @@ package frc.robot.Subsystems;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType; 
 import frc.robot.Subsystems.index; 
@@ -15,7 +13,7 @@ public class Shooter extends SubsystemBase {
     private final CANSparkMax shSpark = new CANSparkMax(0,MotorType.kBrushless); 
     private final CANSparkMax angleSpark = new CANSparkMax(0,MotorType.kBrushless); 
     //elevator
-    
+
     double angleEn = 0; 
 
     public Shooter() {
