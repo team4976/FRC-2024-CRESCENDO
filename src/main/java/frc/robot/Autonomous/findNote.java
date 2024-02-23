@@ -19,8 +19,8 @@ import frc.robot.Subsystems.intake;
 import frc.robot.Subsystems.limelight;
 
 public class findNote extends Command{
-    private double[] horPlace = {0.0, 211.625};
-    private double verPlace[][] = {{0.0, 57.0, 114.0}, {0.0, 66.0, 132.0}};
+    private double noteLocation[][] = {{1, 171}, {1, 114}, {1, 57}, {2, 293.64}, {2, 227.64}, {2, 161.64}, {2, 95.64}, {2, 29.64}, {3, 171}, {3, 114}, {3, 57,}};
+    private double closest[][] = {{6, 10}, {7, 9}, {8, 9}, {9, 8}, {10, 8}};
 
     double diffH;
     double diffV;
@@ -44,6 +44,7 @@ public class findNote extends Command{
     @Override
     public void initialize(){
         a_Swerve.teleopToggle(); 
+        a_l = new limelight();
         pidT.setTolerance(5.0);
         pidF.setTolerance(5.0);
         pidH.setTolerance(5.0); 
@@ -52,27 +53,16 @@ public class findNote extends Command{
     @Override
     public void execute(){
         // find closest note
-        double check = 1000000;
-
-        for (int i = 0; i < horPlace.length; i++){
-            diffH = Math.abs(a_l.Position(0) - horPlace[i]);
-            if (diffH < check){
-                check = diffH; 
+        for (int i = 0; i < closest.length; i++){
+            if (a_l.ID() == closest[i][0]){
+                int index = (int)closest[i][1];
+                diffH = a_l.Position(0) - noteLocation[index][0];
+                diffV = a_l.Position(1) - noteLocation[index][1];
+                System.out.println(noteLocation[index][0]);
+                System.out.println(noteLocation[index][1]);
             }
-            indexH = i;
         }
-        if (indexH != 0){// determine which line of notes is closest to our bot's position
-            column = 1;
-        }else{
-            column = 0;
-        }
-        for (int i = 0; i < verPlace[column].length; i++){
-            diffV = Math.abs(a_l.Position(1) - verPlace[column][i]);
-            if (diffV < check){
-                check = diffV;
-            }
-            indexV = i;
-        }
+        
         TrajectoryConfig config = 
             new TrajectoryConfig(
             Constants.AutoConstants.kMaxSpeedMetersPerSecond,

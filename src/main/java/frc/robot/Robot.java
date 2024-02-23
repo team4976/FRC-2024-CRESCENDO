@@ -7,21 +7,26 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Autonomous.findNote;
 import frc.robot.Swerve.CTREConfigs;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
+  private Command findNote;
   public static CTREConfigs ctreConfigs = new CTREConfigs();
   private RobotContainer m_robotContainer;
 
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
+    findNote = new findNote();
+    findNote.initialize();
   }
 
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+    findNote.execute();
   }
 
   @Override
