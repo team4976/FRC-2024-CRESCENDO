@@ -7,15 +7,24 @@ public class index extends SubsystemBase{
     private final TalonFX indexM = new TalonFX(0); 
     boolean noteIn;
     double vel; 
+    double noteDetectVelocity = 0;
 
     public index(){
 
     }
 
-    public void runIndex(){
+    public void runIndexIn(){
+        while (!noteIn){
+            indexM.set(ControlMode.PercentOutput, 1);
+        }
+        //stop when there's a note sufficiently In There
+    } //NOTE TO SELF: ADD TO INTAKE
+
+    public void runIndexOut(){
         while (noteIn){
             indexM.set(ControlMode.PercentOutput, 1);
         }
+        //stop when note is not In There
     }
     
     public boolean noteIndexed(){
@@ -25,7 +34,7 @@ public class index extends SubsystemBase{
     @Override
     public void periodic(){
         vel = indexM.getSelectedSensorVelocity();
-        if (vel > 0){
+        if (vel > noteDetectVelocity){
             noteIn = true;
         }
         else {
