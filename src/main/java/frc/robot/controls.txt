@@ -20,7 +20,7 @@ UP =  | DOWN =  | RIGHT =  | LEFT =
 
     OPERATOR CONTROLLER
 LEFT JOYSTICK:
-RIGHT JOYSTICK:
+RIGHT JOYSTICK: up/down on shooter tilt (working/placeholder)
 
 Y: 
 X:
@@ -31,7 +31,7 @@ LEFT TRIGGER:
 RIGHT TRIGGER: 
 
 LEFT BUMPER:
-RIGHT BUMPER: 
+RIGHT BUMPER: manual fire (working/placeholder)
 
 D-PAD 
 UP =  | DOWN =  | RIGHT =  | LEFT =  

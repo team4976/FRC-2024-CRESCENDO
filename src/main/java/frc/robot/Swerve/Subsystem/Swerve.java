@@ -57,14 +57,14 @@ boolean teleopActive = true;
 
     public Command teleopToggle(){
         return runOnce( () -> { 
-            System.out.println("teleopActive:"+teleopActive);
+            
             if (!teleopActive){
                 teleopActive = true;
             }
             else {
                 teleopActive = false; 
             }
-             
+            //System.out.println("teleopActive:"+teleopActive); 
         });
     }
     

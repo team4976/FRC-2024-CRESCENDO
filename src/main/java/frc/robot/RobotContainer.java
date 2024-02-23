@@ -8,17 +8,23 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Commands.intake_in;
+import frc.robot.Subsystems.Shooter;
 import frc.robot.Subsystems.intake;
 
 public class RobotContainer {
   intake Intake = new intake ();
+  CommandXboxController _primarycontroller = new CommandXboxController(0);
+  CommandXboxController _secondarycontroller = new CommandXboxController(1);
+  Shooter Shooter = new Shooter(_secondarycontroller); 
   public RobotContainer() {
     configureBindings();
   }
 
   private void configureBindings() {
-    CommandXboxController _primarycontroller = new CommandXboxController(0);
-    CommandXboxController _secondarycontroller = new CommandXboxController(1);
+    //axis three is. probably right joystick x?  i sure hope it is
+    _secondarycontroller.axisGreaterThan(3, 0.1).whileTrue(Shooter.shTilt()); 
+    _secondarycontroller.axisLessThan(3, 0.1).whileTrue(Shooter.shTilt()); 
+    _secondarycontroller.rightBumper().onTrue(Shooter.shootManual());
   }
 
   public Command getAutonomousCommand() {
