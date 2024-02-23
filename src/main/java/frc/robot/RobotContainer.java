@@ -6,15 +6,19 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Commands.intake_in;
+import frc.robot.Subsystems.intake;
 
 public class RobotContainer {
-  
+  intake Intake = new intake ();
   public RobotContainer() {
     configureBindings();
+    new CommandXboxController(0).a().onTrue(new intake_in());
   }
 
   private void configureBindings() {
-
+    
   }
 
   public Command getAutonomousCommand() {
