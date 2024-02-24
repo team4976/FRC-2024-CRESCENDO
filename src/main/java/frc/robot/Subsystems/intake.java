@@ -9,12 +9,10 @@ import frc.robot.RobotConstants;
 public class intake extends SubsystemBase{
     
     public void runIntake(){
-        m_IntakeTalon.setInverted(false);
-        m_IntakeTalon.set(ControlMode.PercentOutput,0.8);
+        m_IntakeTalon.set(ControlMode.PercentOutput,0.4);
     }
 
     public void invertIntake(){
-        m_IntakeTalon.setInverted(true);
-        m_IntakeTalon.set(ControlMode.PercentOutput,0.8);
+        m_IntakeTalon.set(ControlMode.PercentOutput,-.2);
     }
 }

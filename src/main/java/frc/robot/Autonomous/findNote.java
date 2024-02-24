@@ -19,15 +19,15 @@ import frc.robot.Subsystems.intake;
 import frc.robot.Subsystems.limelight;
 
 public class findNote extends Command{
-    private double noteLocation[][] = {{1, 171}, {1, 114}, {1, 57}, {2, 293.64}, {2, 227.64}, {2, 161.64}, {2, 95.64}, {2, 29.64}, {3, 171}, {3, 114}, {3, 57,}};
+    private double noteLocation[][] = {{114, 285}, {114, 228}, {114, 171}, {325.625, 293.64}, {325.625, 227.64}, {325.625, 161.64}, {325.625, 95.64}, {325.625, 29.64}, {537.25, 285}, {537.25, 228}, {537.25, 171}};
     private double closest[][] = {{6, 10}, {7, 9}, {8, 9}, {9, 8}, {10, 8}};
 
     double diffH;
     double diffV;
+    int index;
     int indexH;
     int indexV;
     int column;
-    // placement in ref to center of field in inches for quick guide, we can f*ck with the numbers later, my brain is soup
     private Swerve a_Swerve; 
     private limelight a_l;
     PIDController pidT = new PIDController(0.015, 0, 0);
@@ -55,13 +55,13 @@ public class findNote extends Command{
         // find closest note
         for (int i = 0; i < closest.length; i++){
             if (a_l.ID() == closest[i][0]){
-                int index = (int)closest[i][1];
+                index = (int)closest[i][1];
                 diffH = a_l.Position(0) - noteLocation[index][0];
                 diffV = a_l.Position(1) - noteLocation[index][1];
-                System.out.println(noteLocation[index][0]);
-                System.out.println(noteLocation[index][1]);
             }
         }
+        //System.out.println(noteLocation[index][0]);
+        //System.out.println(noteLocation[index][1]);
         
         TrajectoryConfig config = 
             new TrajectoryConfig(
