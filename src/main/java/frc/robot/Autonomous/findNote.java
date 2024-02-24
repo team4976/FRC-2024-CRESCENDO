@@ -1,5 +1,7 @@
 package frc.robot.Autonomous;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.text.Position;
@@ -17,17 +19,14 @@ import frc.robot.Swerve.Constants;
 import frc.robot.Swerve.Subsystem.Swerve;
 import frc.robot.Subsystems.intake;
 import frc.robot.Subsystems.limelight;
+import frc.robot.Objects.Note;
 
 public class findNote extends Command{
-    private double noteLocation[][] = {{114, 285}, {114, 228}, {114, 171}, {325.625, 293.64}, {325.625, 227.64}, {325.625, 161.64}, {325.625, 95.64}, {325.625, 29.64}, {537.25, 285}, {537.25, 228}, {537.25, 171}};
-    private double closest[][] = {{6, 10}, {7, 9}, {8, 9}, {9, 8}, {10, 8}};
-
     double diffH;
     double diffV;
     int index;
     int indexH;
     int indexV;
-    int column;
     private Swerve a_Swerve; 
     private limelight a_l;
     PIDController pidT = new PIDController(0.015, 0, 0);
@@ -53,13 +52,8 @@ public class findNote extends Command{
     @Override
     public void execute(){
         // find closest note
-        for (int i = 0; i < closest.length; i++){
-            if (a_l.ID() == closest[i][0]){
-                index = (int)closest[i][1];
-                diffH = a_l.Position(0) - noteLocation[index][0];
-                diffV = a_l.Position(1) - noteLocation[index][1];
-            }
-        }
+        Note.findClosest(a_l.ID(), a_l.Position(0), a_l.Position(1), diffH, diffV);
+        Note.removeFromList(index);
         //System.out.println(noteLocation[index][0]);
         //System.out.println(noteLocation[index][1]);
         

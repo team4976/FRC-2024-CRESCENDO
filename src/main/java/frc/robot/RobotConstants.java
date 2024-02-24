@@ -36,4 +36,5 @@ public final class RobotConstants {
     public static double shooter_threshold = 1;
     public static BooleanSupplier elevator_up = () -> m_ElevatorTalon.getSelectedSensorPosition() > elevator_threshold;
     public static BooleanSupplier shooter_up = () -> m_ShooterSpark.getAbsoluteEncoder()  > shooter_threshold;
+
 }
