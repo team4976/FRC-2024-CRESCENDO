@@ -19,14 +19,14 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
-    findNote = new findNote();
-    findNote.initialize();
+    //findNote = new findNote();
+    //findNote.initialize();
   }
 
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    findNote.execute();
+    //findNote.execute();
   }
 
   @Override

@@ -33,7 +33,7 @@ public class speakerAim extends Command {
 
     @Override 
     public void initialize() {
-        a_Swerve.teleopToggle(); 
+        //a_Swerve.teleopToggle(); 
         botPositioned = false;
         shooterAimed = false;
         isFinished = false; //idk if i have to set it but better safe than sorry
@@ -72,7 +72,8 @@ public class speakerAim extends Command {
     }
 
     public void end(){
-        a_Swerve.teleopToggle();
+        //a_Swerve.teleopToggle();
+        //TODO put these back once swerve gets called 
     }
 
     @Override

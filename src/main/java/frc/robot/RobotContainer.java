@@ -44,7 +44,8 @@ public class RobotContainer {
     _secondarycontroller.axisGreaterThan(3, 0.1).whileTrue(Shooter.shTilt()); 
     _secondarycontroller.axisLessThan(3, 0.1).whileTrue(Shooter.shTilt()); 
     _secondarycontroller.rightBumper().onTrue(Shooter.shootManual());
-    _secondarycontroller.povDown().onTrue(Shooter.shAim(0)); 
+    _secondarycontroller.povDown().onTrue(Shooter.shAim(RobotConstants.ampAngle())); 
+    _secondarycontroller.povUp().onTrue(Shooter.shAim(RobotConstants.speakerAngle()));
 
     //more swerve I copied from kitbot code
     s_Swerve.setDefaultCommand(

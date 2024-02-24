@@ -43,7 +43,7 @@ public class findNote extends Command{
     
     @Override
     public void initialize(){
-        a_Swerve.teleopToggle(); 
+        //a_Swerve.teleopToggle(); 
         a_l = new limelight();
         pidT.setTolerance(5.0);
         pidF.setTolerance(5.0);
@@ -81,7 +81,8 @@ public class findNote extends Command{
     public void end(){
         Intake.runIntake();
         super.initialize();
-        a_Swerve.teleopToggle();
+        //a_Swerve.teleopToggle();
+        //TODO put back teleoptoggles
     }
 
     @Override

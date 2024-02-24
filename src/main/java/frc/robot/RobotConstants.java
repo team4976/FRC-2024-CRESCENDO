@@ -11,7 +11,8 @@ public final class RobotConstants {
     //shooter
     public static final CANSparkMax m_ShooterSpark = new CANSparkMax(41,MotorType.kBrushless); 
     public static final CANSparkMax m_ShooterSparkB = new CANSparkMax(42, MotorType.kBrushless); 
-    public static final CANSparkMax m_AngleSpark = new CANSparkMax(0,MotorType.kBrushless);
+    public static final CANSparkMax m_AngleSpark = new CANSparkMax(43,MotorType.kBrushless);
+    public static final CANSparkMax m_AngleSparkB = new CANSparkMax(44, MotorType.kBrushless); 
     //indexer 
     public static final TalonFX m_IndexTalon = new TalonFX(40);
     //intake
@@ -23,11 +24,11 @@ public final class RobotConstants {
 //variables
     public static boolean elevator_up = false;
     public static boolean shooter_up = false;
-    
-    public double speakerAngle(){
+
+    public static double speakerAngle(){
         return 0.3; 
     }
-    public double ampAngle(){
+    public static double ampAngle(){
         return 0.1; 
     }
 }
