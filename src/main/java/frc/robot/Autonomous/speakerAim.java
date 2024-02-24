@@ -46,7 +46,7 @@ public class speakerAim extends Command {
 
     @Override 
     public void execute() {
-        if (a_l.ID() == 3){
+        if (a_l.ID() == speakerTarget){
             if (a_l.THor() < distMax && a_l.THor() > distMin && a_l.X() < hMax && a_l.X() > hMin){
                 botPositioned = true; 
             }

@@ -1,6 +1,8 @@
 package frc.robot.Subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class index extends SubsystemBase{
@@ -64,5 +66,7 @@ public class index extends SubsystemBase{
             noteOut = false;
         }
         //making that two separate criterion cuts out the inbetween spaces where the note is partially in there
+
+        SmartDashboard.putNumber("Index Velocity", vel); 
     }
 }
