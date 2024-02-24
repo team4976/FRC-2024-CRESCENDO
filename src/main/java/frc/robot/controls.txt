@@ -38,7 +38,7 @@ LEFT BUMPER:
 RIGHT BUMPER: manual fire (working/placeholder)
 
 D-PAD 
-UP =  | DOWN =  | RIGHT =  | LEFT =  
+UP =  shooter speaker angle (p)| DOWN =  shooter amp angle (p)| RIGHT =  | LEFT =  
 
 - - - - -
 

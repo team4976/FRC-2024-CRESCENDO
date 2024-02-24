@@ -44,7 +44,7 @@ public class RobotContainer {
     _secondarycontroller.axisGreaterThan(3, 0.1).whileTrue(Shooter.shTilt()); 
     _secondarycontroller.axisLessThan(3, 0.1).whileTrue(Shooter.shTilt()); 
     _secondarycontroller.rightBumper().onTrue(Shooter.shootManual());
-
+    _secondarycontroller.povDown().onTrue(Shooter.shAim(0)); 
 
     //more swerve I copied from kitbot code
     s_Swerve.setDefaultCommand(

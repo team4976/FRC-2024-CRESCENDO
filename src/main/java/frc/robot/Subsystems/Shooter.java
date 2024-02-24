@@ -10,7 +10,8 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import static frc.robot.RobotConstants.m_AngleSpark;
 import static frc.robot.RobotConstants.m_ShooterSpark;
-import frc.robot.Subsystems.index;
+import static frc.robot.RobotConstants.m_ShooterSparkB;
+//import frc.robot.Subsystems.index;
 
 
 public class Shooter extends SubsystemBase {
@@ -24,13 +25,20 @@ public class Shooter extends SubsystemBase {
 
     public Shooter(CommandXboxController c) {
         m_ctrl = c; 
-        m_AngleSpark.getPIDController().setP(0.015); 
+        m_AngleSpark.getPIDController().setP(0.015);
+        m_ShooterSparkB.setInverted(true);
+        m_ShooterSparkB.follow(m_ShooterSpark);  
+
+        m_AngleSpark.getEncoder().setPosition(0);
     }
 
-    public void shAim(double a){
+    public Command shAim(double a){
+        return runOnce( () -> {
         //angleEn =  angleSpark.getEncoder().getPosition(); 
-        m_AngleSpark.getEncoder().setPosition(0); 
+        //m_AngleSpark.getEncoder().setPosition(0); 
         m_AngleSpark.getPIDController().setReference(a, CANSparkMax.ControlType.kPosition);
+        //CHECK ELEVATOR HEIGHT??
+        }); 
     }
     public void shoot(){
         //shoot
