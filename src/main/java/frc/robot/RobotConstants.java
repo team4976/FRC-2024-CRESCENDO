@@ -23,6 +23,7 @@ public final class RobotConstants {
 //variables
     public static boolean elevator_up = false;
     public static boolean shooter_up = false;
+    
     public double speakerAngle(){
         return 0.3; 
     }

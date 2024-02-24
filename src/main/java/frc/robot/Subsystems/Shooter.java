@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import static frc.robot.RobotConstants.m_AngleSpark;
 import static frc.robot.RobotConstants.m_ShooterSpark;
 import static frc.robot.RobotConstants.m_ShooterSparkB;
+import static frc.robot.RobotConstants.shooter_up;
 //import frc.robot.Subsystems.index;
 
 
@@ -32,7 +33,7 @@ public class Shooter extends SubsystemBase {
         m_AngleSpark.getEncoder().setPosition(0);
     }
 
-    public Command shAim(double a){
+    public Command shAim(double a){ //tilts to position
         return runOnce( () -> {
         //angleEn =  angleSpark.getEncoder().getPosition(); 
         //m_AngleSpark.getEncoder().setPosition(0); 
@@ -40,7 +41,7 @@ public class Shooter extends SubsystemBase {
         //CHECK ELEVATOR HEIGHT??
         }); 
     }
-    public void shoot(){
+    public void shoot(){ //run speaker wheels, then index. one speed currently
         //shoot
         m_ShooterSpark.set(1);
         while (m_ShooterSpark.getEncoder().getVelocity() < 1){
@@ -72,9 +73,14 @@ public class Shooter extends SubsystemBase {
         });
     }
 
-    
+    @Override
+    public void periodic(){
+        if (m_AngleSpark.getEncoder().getPosition() > 0.09){
+            //constants boolean true
+            shooter_up = true; 
+        }
+        else{
+            shooter_up = false; 
+        }
+    }
 }
-//raise shooter
-//angle shooter
-//index [note: index also used to intake notes] [heh. index. intake. badum tiss]
-//shoot
