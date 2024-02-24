@@ -13,7 +13,7 @@ public class elevator_up extends Command{
     }
     @Override
     public void initialize(){
-        if (shooter_up == false){
+        if (shooter_up.getAsBoolean()){
             Elevator.elevate();
         }
         super.initialize();
