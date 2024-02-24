@@ -4,9 +4,9 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import static frc.robot.RobotConstants.m_IndexTalon;
 
 public class index extends SubsystemBase{
-    private final TalonFX indexM = new TalonFX(0); 
     boolean noteIn;
     boolean noteOut; 
     double vel; 
@@ -21,27 +21,27 @@ public class index extends SubsystemBase{
 //"-In" puts the note between the wheels. "-Out" pushes it through when it's already in there
     public void runIndexIn(){
         while (!noteIn){
-            indexM.set(ControlMode.PercentOutput, 1);
+            m_IndexTalon.set(ControlMode.PercentOutput, 1);
         }
         //stop when there's a note sufficiently In There
     } //NOTE TO SELF: ADD TO INTAKE
 
     public void runIndexOut(){
         while (!noteOut){
-            indexM.set(ControlMode.PercentOutput, 1);
+            m_IndexTalon.set(ControlMode.PercentOutput, 1);
         }
         //stop when note is not In There
     }
 
     public void revIndexIn(){
         while (!noteIn){
-            indexM.set(ControlMode.PercentOutput, -1);
+            m_IndexTalon.set(ControlMode.PercentOutput, -1);
         }
     }
 
     public void revIndexOut(){
         while (!noteOut){
-            indexM.set(ControlMode.PercentOutput, -1);
+            m_IndexTalon.set(ControlMode.PercentOutput, -1);
         }
     }
     
@@ -51,7 +51,7 @@ public class index extends SubsystemBase{
 
     @Override
     public void periodic(){
-        vel = indexM.getSelectedSensorVelocity();
+        vel = m_IndexTalon.getSelectedSensorVelocity();
         if (vel < noteDetectVelocity){ //threshold for "there is definitely a note in here"
             noteIn = true;
         }
@@ -67,6 +67,6 @@ public class index extends SubsystemBase{
         }
         //making that two separate criterion cuts out the inbetween spaces where the note is partially in there
 
-        SmartDashboard.putNumber("Index Velocity", vel); 
+        SmartDashboard.putNumber("IndexMotorVelocity", vel); 
     }
 }
