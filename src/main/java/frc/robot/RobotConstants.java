@@ -1,5 +1,7 @@
 package frc.robot;
 
+import java.util.function.BooleanSupplier;
+
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
@@ -22,13 +24,16 @@ public final class RobotConstants {
     public static final VictorSPX m_ElevatorVictor = new VictorSPX(46);
     //idk is there anything else we need?
 //variables
-    public static boolean elevator_up = false;
-    public static boolean shooter_up = false;
-
     public static double speakerAngle(){
         return 0.3; 
     }
     public static double ampAngle(){
         return 0.1; 
     }
+    public static double elevator_position = 0;
+    public static double shooter_position = 0;
+    public static double elevator_threshold = 1;
+    public static double shooter_threshold = 1;
+    public static BooleanSupplier elevator_up = () -> m_ElevatorTalon.getSelectedSensorPosition() > elevator_threshold;
+    public static BooleanSupplier shooter_up = () -> m_ShooterSpark.getAbsoluteEncoder()  > shooter_threshold;
 }
