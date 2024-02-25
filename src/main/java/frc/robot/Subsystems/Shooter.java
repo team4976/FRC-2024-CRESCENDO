@@ -35,7 +35,7 @@ public class Shooter extends SubsystemBase {
         m_ShooterSparkB.setInverted(true);
         m_ShooterSparkB.follow(m_ShooterSpark);  
         m_AngleSparkB.follow(m_AngleSpark); 
-
+        //m_ShooterSpark.getPIDController().
         m_AngleSpark.getEncoder().setPosition(0);
     }
 
@@ -47,39 +47,38 @@ public class Shooter extends SubsystemBase {
         //CHECK ELEVATOR HEIGHT??
         }); 
     }
-    public void shoot(){ //run speaker wheels, then index. one speed currently
-        //shoot
-        m_ShooterSpark.set(0.15);
-        while (m_ShooterSpark.getEncoder().getVelocity() < 0.15){
-            //just waiting. theres a better command for this isnt there but I do not remember
-        }
-        s_index.runIndexOut(); 
-        //stop after a few seconds? 
-        Commands.waitSeconds(2);
-        m_ShooterSpark.set(0); 
+    public Command shootIndexed(){ 
+        return runOnce( () -> {
+            m_ShooterSpark.set(-0.5);
+            //s_index.runIndexOut();
+        });
     }
+   
     
     //manual control commands
     public Command shTilt(){
         return run( () -> { //command is "while true", should not run while joystick not past threshold
-                m_AngleSpark.set(m_ctrl.getRightX()); 
+                m_AngleSpark.set(m_ctrl.getRightX()/2); 
         });
 
     }
-    public Command shootManual(){ //theoretically could be bound to an axis if so desired
+    public Command shootManual(){ 
         return runOnce( () -> {
-            m_ShooterSpark.set(0.15);
-            while (m_ShooterSpark.getEncoder().getVelocity() < 0.15){
-                //just waiting. theres a better command for this isnt there but I do not remember
-            }
-            //s_index.runIndexOut();
-            m_IndexTalon.set(ControlMode.PercentOutput, 0.15); 
-            //stop after a few seconds? 
-            Commands.waitSeconds(2);
-            m_ShooterSpark.set(0); 
-            m_IndexTalon.set(ControlMode.PercentOutput, 0); 
+            m_ShooterSpark.set(-0.5); 
         });
     }
+     public Command shootStop(){ 
+        return runOnce( () -> {
+            m_ShooterSpark.set(0);
+            
+        });
+    }
+    public Command shootManualInverse(){ 
+        return runOnce( () -> {
+            m_ShooterSpark.set(0.5); 
+        });
+    }
+
 
     @Override
     public void periodic(){

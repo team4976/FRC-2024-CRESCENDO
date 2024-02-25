@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -11,8 +13,10 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Commands.intake_in;
 import frc.robot.Subsystems.Shooter;
+import frc.robot.Subsystems.index;
 import frc.robot.Subsystems.intake;
 import frc.robot.Swerve.Subsystem.Swerve;
 import frc.robot.Swerve.commands.TeleopSwerve;
@@ -22,7 +26,7 @@ public class RobotContainer {
   CommandXboxController _primarycontroller = new CommandXboxController(0);
   CommandXboxController _secondarycontroller = new CommandXboxController(1);
 
-  //swerve stuff I copied from kitbot code
+  //swerve copied from kitbot code
   private final Joystick driver = new Joystick(0);
   private final int translationAxis = XboxController.Axis.kLeftY.value;
   private final int strafeAxis = XboxController.Axis.kLeftX.value;
@@ -33,21 +37,49 @@ public class RobotContainer {
     /* Subsystems */
   private final Swerve s_Swerve = new Swerve();
   Shooter Shooter = new Shooter(_secondarycontroller); 
-  intake Intake = new intake ();
+  index Index = new index();
+  intake Intake = new intake (Index);
+  public BooleanSupplier noteCheck = () -> Index.noteIndexed();
+  
 
   public RobotContainer() {
     configureBindings();
   }
 
   private void configureBindings() {
-    //axis three is. probably right joystick x?  i sure hope it is
-    _secondarycontroller.axisGreaterThan(3, 0.1).whileTrue(Shooter.shTilt()); 
-    _secondarycontroller.axisLessThan(3, 0.1).whileTrue(Shooter.shTilt()); 
-    _secondarycontroller.rightBumper().onTrue(Shooter.shootManual());
-    _secondarycontroller.povDown().onTrue(Shooter.shAim(RobotConstants.ampAngle())); 
-    _secondarycontroller.povUp().onTrue(Shooter.shAim(RobotConstants.speakerAngle()));
+    //axis four is right js x 
+  //_secondarycontroller.axisGreaterThan(4, 0.1).whileTrue(Shooter.shTilt()); 
+    //_secondarycontroller.axisLessThan(4, 0.1).whileTrue(Shooter.shTilt()); 
+    //_secondarycontroller.povDown().onTrue(Shooter.shAim(RobotConstants.ampAngle())); 
+    //_secondarycontroller.povUp().onTrue(Shooter.shAim(RobotConstants.speakerAngle()));
 
-    //more swerve I copied from kitbot code
+    _primarycontroller.x().onTrue(Intake.runIntake());
+    new Trigger(noteCheck).onTrue(Intake.stopIntake());
+    //_primarycontroller.a().onTrue(Intake.intakeManualInverse()); 
+    //_primarycontroller.x().onFalse(Intake.intakeManualStop());
+    //_primarycontroller.a().onFalse(Intake.intakeManualStop());
+
+    _primarycontroller.leftBumper().onTrue(Shooter.shootManual());
+    _primarycontroller.leftBumper().onFalse(Shooter.shootStop()); 
+    _primarycontroller.rightBumper().onTrue(Index.indexManual());
+    _primarycontroller.rightBumper().onFalse(Index.indexManualStop()); 
+    
+    _secondarycontroller.y().onTrue(Index.indexManual());
+    _secondarycontroller.y().onFalse(Index.indexManualStop());
+    _secondarycontroller.x().onTrue(Intake.intakeManual());
+    _secondarycontroller.x().onFalse(Intake.intakeManualStop()); 
+    _secondarycontroller.a().onTrue(Intake.intakeManualInverse());
+    _secondarycontroller.a().onFalse(Intake.intakeManualStop()); 
+    _secondarycontroller.b().onTrue(Index.indexManualInverse());
+    _secondarycontroller.b().onFalse(Index.indexManualStop()); 
+
+    _secondarycontroller.leftBumper().onTrue(Shooter.shootManual());
+    _secondarycontroller.leftBumper().onFalse(Shooter.shootStop());
+    _secondarycontroller.rightBumper().onTrue(Shooter.shootManualInverse());
+    _secondarycontroller.rightBumper().onFalse(Shooter.shootStop());
+    
+
+    //more swerve copied from kitbot code
     s_Swerve.setDefaultCommand(
       new TeleopSwerve(
                 s_Swerve, 

@@ -14,7 +14,7 @@ public final class RobotConstants {
     public static final CANSparkMax m_AngleSpark = new CANSparkMax(43,MotorType.kBrushless);
     public static final CANSparkMax m_AngleSparkB = new CANSparkMax(44, MotorType.kBrushless); 
     //indexer 
-    public static final TalonFX m_IndexTalon = new TalonFX(40);
+    public static final TalonSRX m_IndexTalon = new TalonSRX(40);
     //intake
     public static final TalonSRX m_IntakeTalon = new TalonSRX(47);
     //elevator
