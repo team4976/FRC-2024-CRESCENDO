@@ -8,7 +8,18 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+
 public final class RobotConstants {
+
+//controllers
+public static final  XboxController _primarycontroller = new XboxController(0);
+public static final  CommandXboxController _secondarycontroller = new CommandXboxController(1);
+
 //motors n whatnot
     //shooter
     public static final CANSparkMax m_ShooterSpark = new CANSparkMax(41,MotorType.kBrushless); 
@@ -35,6 +46,25 @@ public final class RobotConstants {
     public static double elevator_threshold = 1;
     public static double shooter_threshold = 1;
     public static BooleanSupplier elevator_up = () -> m_ElevatorTalon.getSelectedSensorPosition() > elevator_threshold;
-    public static BooleanSupplier shooter_up = () -> m_ShooterSpark.getAbsoluteEncoder()  > shooter_threshold;
+
+        public static final class AutoConstants { //TODO: The below constants must be tuned to the robot
+        public static final double kMaxSpeedMetersPerSecond = 3;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+        public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
+        public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
+    
+        public static final double kPXController = 1;
+        public static final double kPYController = 1;
+        public static final double kPThetaController = 1;
+
+        public static Pose2d amppose_blue = new Pose2d(112, 310, new Rotation2d(0));//needs to be fine tuned + and need to test angle
+        public static Pose2d amppose_red = new Pose2d(600, 310, new Rotation2d(0));//needs to be fine tuned
+    
+        /* Constraint for the motion profilied robot angle controller */
+        public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
+            new TrapezoidProfile.Constraints(
+                kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+
+        }
 
 }

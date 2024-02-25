@@ -19,45 +19,44 @@ import frc.robot.Swerve.commands.TeleopSwerve;
 
 public class RobotContainer {
   
-  CommandXboxController _primarycontroller = new CommandXboxController(0);
-  CommandXboxController _secondarycontroller = new CommandXboxController(1);
 
-  //swerve stuff I copied from kitbot code
-  private final Joystick driver = new Joystick(0);
+  private JoystickButton zeroGyro = new JoystickButton(RobotConstants._primarycontroller, XboxController.Button.kY.value);
+  
   private final int translationAxis = XboxController.Axis.kLeftY.value;
   private final int strafeAxis = XboxController.Axis.kLeftX.value;
   private final int rotationAxis = XboxController.Axis.kRightX.value;
 
-  private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
-  private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+
     /* Subsystems */
   private final Swerve s_Swerve = new Swerve();
-  Shooter Shooter = new Shooter(_secondarycontroller); 
+  Shooter Shooter = new Shooter(RobotConstants._secondarycontroller); 
   intake Intake = new intake ();
 
   public RobotContainer() {
+
+    s_Swerve.setDefaultCommand(
+      new TeleopSwerve(
+          s_Swerve, 
+          () -> -RobotConstants._primarycontroller.getRawAxis(translationAxis), 
+          () -> -RobotConstants._primarycontroller.getRawAxis(strafeAxis), 
+          () ->RobotConstants._primarycontroller.getRawAxis(rotationAxis),
+          () -> RobotConstants._primarycontroller.getLeftBumper()
+      )
+  );
+
     configureBindings();
   }
 
   private void configureBindings() {
     //axis three is. probably right joystick x?  i sure hope it is
-    _secondarycontroller.axisGreaterThan(3, 0.1).whileTrue(Shooter.shTilt()); 
-    _secondarycontroller.axisLessThan(3, 0.1).whileTrue(Shooter.shTilt()); 
-    _secondarycontroller.rightBumper().onTrue(Shooter.shootManual());
-    _secondarycontroller.povDown().onTrue(Shooter.shAim(RobotConstants.ampAngle())); 
-    _secondarycontroller.povUp().onTrue(Shooter.shAim(RobotConstants.speakerAngle()));
+   RobotConstants._secondarycontroller.axisGreaterThan(3, 0.1).whileTrue(Shooter.shTilt()); 
+    RobotConstants._secondarycontroller.axisLessThan(3, 0.1).whileTrue(Shooter.shTilt()); 
+    RobotConstants._secondarycontroller.rightBumper().onTrue(Shooter.shootManual());
+    RobotConstants._secondarycontroller.povDown().onTrue(Shooter.shAim(RobotConstants.ampAngle())); 
+    RobotConstants._secondarycontroller.povUp().onTrue(Shooter.shAim(RobotConstants.speakerAngle()));
 
-    //more swerve I copied from kitbot code
-    s_Swerve.setDefaultCommand(
-      new TeleopSwerve(
-                s_Swerve, 
-                () -> -driver.getRawAxis(translationAxis), 
-                () -> -driver.getRawAxis(strafeAxis), 
-                () -> -driver.getRawAxis(rotationAxis), 
-                () -> robotCentric.getAsBoolean()
-            )
-        );
-        zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+
+        zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));//
         zeroGyro.onTrue(s_Swerve.testButtons("TRUE"));
         zeroGyro.onFalse(s_Swerve.testButtons("False"));
     
