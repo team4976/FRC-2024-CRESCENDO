@@ -20,7 +20,7 @@ public class intake extends SubsystemBase{
     }
     public Command runIntake(){
         return runOnce( () -> {
-            m_IntakeTalon.set(ControlMode.PercentOutput,-0.5);
+            m_IntakeTalon.set(ControlMode.PercentOutput,-0.7);
             i_index.runIndexIn();
         }); 
     }
@@ -38,7 +38,7 @@ public class intake extends SubsystemBase{
         return runOnce( () -> {
             
             //System.out.println("START");
-            m_IntakeTalon.set(ControlMode.PercentOutput, -0.5); 
+            m_IntakeTalon.set(ControlMode.PercentOutput, -0.7); 
             //m_IndexTalon.set(ControlMode.PercentOutput, -0.35); 
         });
     }

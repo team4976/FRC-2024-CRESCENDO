@@ -51,7 +51,7 @@ public class index extends SubsystemBase{
     public Command indexManual(){ 
         return runOnce( () -> {
             indexManual = true; 
-            m_IndexTalon.set(ControlMode.PercentOutput, -0.35); 
+            m_IndexTalon.set(ControlMode.PercentOutput, -0.6); 
         });
     }
     public Command indexManualInverse(){ 
