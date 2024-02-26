@@ -1,7 +1,5 @@
 package frc.robot.Commands;
 
-import static frc.robot.RobotConstants.shooter_up;
-
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class elevator_up extends Command{
@@ -13,9 +11,6 @@ public class elevator_up extends Command{
     }
     @Override
     public void initialize(){
-        if (shooter_up == false){
-            Elevator.elevate();
-        }
         super.initialize();
     }
     @Override

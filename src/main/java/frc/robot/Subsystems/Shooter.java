@@ -15,7 +15,6 @@ import static frc.robot.RobotConstants.m_AngleSpark;
 import static frc.robot.RobotConstants.m_AngleSparkB;
 import static frc.robot.RobotConstants.m_ShooterSpark;
 import static frc.robot.RobotConstants.m_ShooterSparkB;
-import static frc.robot.RobotConstants.shooter_up;
 import static frc.robot.RobotConstants.m_IndexTalon;
 //import frc.robot.Subsystems.index;
 
@@ -80,14 +79,4 @@ public class Shooter extends SubsystemBase {
     }
 
 
-    @Override
-    public void periodic(){
-        if (m_AngleSpark.getEncoder().getPosition() > 0.09){
-            //constants boolean true
-            shooter_up = true; 
-        }
-        else{
-            shooter_up = false; 
-        }
-    }
 }
