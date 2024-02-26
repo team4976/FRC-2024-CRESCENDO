@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.RobotConstants.m_ElevatorTalon;
 import static frc.robot.RobotConstants.m_ElevatorVictor;
 import static frc.robot.RobotConstants.elevator_position;
-import frc.robot.RobotConstants;
 
 public class elevator extends SubsystemBase{
     public void elevate(){
