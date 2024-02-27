@@ -95,7 +95,7 @@ public class RobotContainer {
                 () -> driver.getRawAxis(translationAxis), 
                 () -> driver.getRawAxis(strafeAxis), 
                 () -> -driver.getRawAxis(rotationAxis), 
-                () -> false
+                () -> robotCentric.getAsBoolean()
             )
         );
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
