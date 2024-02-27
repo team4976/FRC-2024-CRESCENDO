@@ -2,6 +2,7 @@ package frc.robot;
 
 import java.util.function.BooleanSupplier;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
@@ -11,23 +12,23 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.XboxController;
+//import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public final class RobotConstants {
 
 //controllers
-public static final  XboxController _primarycontroller = new XboxController(0);
+public static final  CommandXboxController _primarycontroller = new CommandXboxController(0);
 public static final  CommandXboxController _secondarycontroller = new CommandXboxController(1);
 
 //motors n whatnot
     //shooter
-    public static final CANSparkMax m_ShooterSpark = new CANSparkMax(41,MotorType.kBrushless); 
-    public static final CANSparkMax m_ShooterSparkB = new CANSparkMax(42, MotorType.kBrushless); 
+    public static final CANSparkMax m_ShooterSpark = new CANSparkMax(41,MotorType.kBrushless); //BOTTOM
+    public static final CANSparkMax m_ShooterSparkB = new CANSparkMax(42, MotorType.kBrushless); //TOP
     public static final CANSparkMax m_AngleSpark = new CANSparkMax(43,MotorType.kBrushless);
     public static final CANSparkMax m_AngleSparkB = new CANSparkMax(44, MotorType.kBrushless); 
     //indexer 
-    public static final TalonFX m_IndexTalon = new TalonFX(40);
+    public static final TalonSRX m_IndexTalon = new TalonSRX(40);
     //intake
     public static final TalonSRX m_IntakeTalon = new TalonSRX(47);
     //elevator
@@ -67,4 +68,14 @@ public static final  CommandXboxController _secondarycontroller = new CommandXbo
 
         }
 
+        public static void motorsZero(){
+            m_ShooterSpark.set(0);
+            m_ShooterSparkB.set(0);
+            m_AngleSpark.set(0);
+            m_AngleSparkB.set(0);
+            m_ElevatorTalon.set(ControlMode.PercentOutput, 0);
+            m_ElevatorVictor.set(ControlMode.PercentOutput, 0);
+            m_IndexTalon.set(ControlMode.PercentOutput, 0);
+            m_IntakeTalon.set(ControlMode.PercentOutput, 0);
+        }
 }

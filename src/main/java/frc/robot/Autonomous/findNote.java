@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Swerve.Subsystem.Swerve;
 import frc.robot.Subsystems.intake;
 import frc.robot.Subsystems.limelight;
-import frc.robot.Objects.Note;
+//import frc.robot.Objects.Note;
 
 public class findNote extends Command{
     double diffH;
@@ -39,8 +39,8 @@ public class findNote extends Command{
     @Override
     public void execute(){
         // find closest note
-        Note.findClosest(a_l.ID(), a_l.Position(0), a_l.Position(1), diffH, diffV);
-        Note.removeFromList(index);
+        //Note.findClosest(a_l.ID(), a_l.Position(0), a_l.Position(1), diffH, diffV);
+        //Note.removeFromList(index);
         //System.out.println(noteLocation[index][0]);
         //System.out.println(noteLocation[index][1]);
         

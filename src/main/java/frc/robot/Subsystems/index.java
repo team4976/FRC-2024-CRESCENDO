@@ -3,16 +3,18 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.RobotConstants.m_IndexTalon;
+import static frc.robot.RobotConstants.m_IntakeTalon;
 
 public class index extends SubsystemBase{
     boolean noteIn;
-    boolean noteOut; 
+    boolean indexManual; 
     double vel; 
-    //placeholder values, calibrate later
-    double noteDetectVelocity = 0;
-    double noteNoneVelocity = 0; 
+    //calibrated
+    double noteDetectVelocity = 10;
+    double noteNoneVelocity = 10; 
 
     public index(){
 
@@ -20,30 +22,49 @@ public class index extends SubsystemBase{
 //the run commands take the note into the pizza box. the rev commands push it out. 
 //"-In" puts the note between the wheels. "-Out" pushes it through when it's already in there
     public void runIndexIn(){
-        while (!noteIn){
-            m_IndexTalon.set(ControlMode.PercentOutput, 1);
-        }
-        //stop when there's a note sufficiently In There
-    } //NOTE TO SELF: ADD TO INTAKE
+            m_IndexTalon.set(ControlMode.PercentOutput, -0.35);
+            indexManual = false; 
+    } 
 
     public void runIndexOut(){
-        while (!noteOut){
-            m_IndexTalon.set(ControlMode.PercentOutput, 1);
-        }
+        System.out.println("STOP IND"); 
         //stop when note is not In There
+        if (!indexManual){
+        m_IndexTalon.set(ControlMode.PercentOutput, 0);
+        }
     }
 
     public void revIndexIn(){
         while (!noteIn){
-            m_IndexTalon.set(ControlMode.PercentOutput, -1);
+            m_IndexTalon.set(ControlMode.PercentOutput, 0.35);
         }
+        m_IndexTalon.set(ControlMode.PercentOutput, 0);
     }
 
     public void revIndexOut(){
-        while (!noteOut){
-            m_IndexTalon.set(ControlMode.PercentOutput, -1);
+        while (noteIn){
+            m_IndexTalon.set(ControlMode.PercentOutput, 0.35);
         }
+        m_IndexTalon.set(ControlMode.PercentOutput, 0);
     }
+//MANUAL CONTROLS HERE
+    public Command indexManual(){ 
+        return runOnce( () -> {
+            indexManual = true; 
+            m_IndexTalon.set(ControlMode.PercentOutput, -0.6); 
+        });
+    }
+    public Command indexManualInverse(){ 
+        return runOnce( () -> {
+            m_IndexTalon.set(ControlMode.PercentOutput, 0.35); 
+        });
+    }
+    public Command indexManualStop(){ 
+        return runOnce( () -> {
+            m_IndexTalon.set(ControlMode.PercentOutput, 0); 
+        });
+    }
+    
     
     public boolean noteIndexed(){
         return noteIn; 
@@ -51,22 +72,22 @@ public class index extends SubsystemBase{
 
     @Override
     public void periodic(){
-        vel = m_IndexTalon.getSelectedSensorVelocity();
-        if (vel < noteDetectVelocity){ //threshold for "there is definitely a note in here"
+        vel = m_IndexTalon.getSupplyCurrent();
+        if (vel > noteDetectVelocity && m_IntakeTalon.getSupplyCurrent() < noteNoneVelocity){ //threshold for "there is definitely a note in here"
             noteIn = true;
         }
         else {
             noteIn = false; 
         }   
 
-        if (vel > noteNoneVelocity){ //threshold for "the note is Gone"
-            noteOut = true;
-        }
-        else {
-            noteOut = false;
-        }
         //making that two separate criterion cuts out the inbetween spaces where the note is partially in there
+        /*if (vel > 3){
+            System.out.println(vel);
+        }*/
+        SmartDashboard.putNumber("IndexCurrent", vel);
+        SmartDashboard.putNumber("IntakeCurrent", m_IntakeTalon.getSupplyCurrent()); 
+        SmartDashboard.putBoolean("noteIn", noteIn);
+         
 
-        SmartDashboard.putNumber("IndexMotorVelocity", vel); 
     }
 }
