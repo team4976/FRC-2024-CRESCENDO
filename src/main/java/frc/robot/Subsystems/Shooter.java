@@ -64,11 +64,11 @@ public class Shooter extends SubsystemBase {
     
     //manual control commands
     public Command shTilt(){
-        return run( () -> { 
-            if (!tiltStopped){
-                m_AngleSpark.set(m_ctrl.getRightY()/3); 
+        return run( () -> {
+            //if (tiltStopped){ 
+                m_AngleSpark.set(m_ctrl.getRawAxis(5)/3); 
                 SmartDashboard.putNumber("TILT INPUT", m_ctrl.getRightY()/3);
-            }
+            //}
         });
     }
     public Command tiltStop(){
@@ -105,7 +105,7 @@ public class Shooter extends SubsystemBase {
         return run( () -> {
             if (arcActive){
             m_ShooterSparkB.set(m_ctrl.getLeftTriggerAxis()*arcTopInversed);
-            SmartDashboard.putNumber("ARCTOP_SPEED", m_ctrl.getLeftTriggerAxis()*arcTopInversed);
+            //SmartDashboard.putNumber("ARCTOP_SPEED", m_ctrl.getLeftTriggerAxis()*arcTopInversed);
             }
         });
     }
@@ -113,7 +113,7 @@ public class Shooter extends SubsystemBase {
         return run( () -> {
             if (arcActive){
             m_ShooterSpark.set(m_ctrl.getRightTriggerAxis()*arcBottomInversed); 
-            SmartDashboard.putNumber("ARCBOTTOM_SPEED", m_ctrl.getRightTriggerAxis()*arcBottomInversed);
+            //SmartDashboard.putNumber("ARCBOTTOM_SPEED", m_ctrl.getRightTriggerAxis()*arcBottomInversed);
             }
         });
     }
@@ -143,7 +143,7 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void periodic(){
-        SmartDashboard.putBoolean("ARCSHOOTER ACTIVE", arcActive);   
+        //SmartDashboard.putBoolean("ARCSHOOTER ACTIVE", arcActive);   
     }
 
 }

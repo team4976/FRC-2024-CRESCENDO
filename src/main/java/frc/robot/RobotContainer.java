@@ -11,7 +11,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+//import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Commands.intake_in;
@@ -20,6 +21,7 @@ import frc.robot.Subsystems.index;
 import frc.robot.Subsystems.intake;
 import frc.robot.Swerve.Subsystem.Swerve;
 import frc.robot.Swerve.commands.TeleopSwerve;
+import frc.robot.Swerve.commands.drive;
 
 import static frc.robot.RobotConstants._primarycontroller;
 import static frc.robot.RobotConstants._secondarycontroller;
@@ -43,7 +45,7 @@ public class RobotContainer {
   index Index = new index();
   intake Intake = new intake (Index);
   public BooleanSupplier noteCheck = () -> Index.noteIndexed();
-  
+// public final drive s_drive = new drive(s_Swerve); 
 
   public RobotContainer() {
     RobotConstants.motorsZero(); 
@@ -52,8 +54,9 @@ public class RobotContainer {
 
   private void configureBindings() {
     //axis four is right js y 
-    //_secondarycontroller.axisGreaterThan(5, 0.1).whileTrue(Shooter.shTilt()); 
-    //_secondarycontroller.start().onTrue(Shooter.tiltStop());
+    //_secondarycontroller.axisGreaterThan(5, 0.1).onTrue(Shooter.shTilt()); 
+    //_secondarycontroller.axisLessThan(5, -0.1).on
+    
 
     //_secondarycontroller.povDown().onTrue(Shooter.shAim(RobotConstants.ampAngle())); 
     //_secondarycontroller.povUp().onTrue(Shooter.shAim(RobotConstants.speakerAngle()));
@@ -65,12 +68,12 @@ public class RobotContainer {
     //_primarycontroller.a().onFalse(Intake.intakeManualStop());
 
     //_primarycontroller.leftBumper().onTrue(Shooter.shootManual());
-    //_primarycontroller.leftBumper().onFalse(Shooter.shootStop()); 
+   // _primarycontroller.leftBumper().onFalse(Shooter.shootStop()); 
     _primarycontroller.rightBumper().onTrue(Index.indexManual());
     _primarycontroller.rightBumper().onFalse(Index.indexManualStop()); 
     
-    //_secondarycontroller.y().onTrue(Index.indexManual());
-    //_secondarycontroller.y().onFalse(Index.indexManualStop());
+    _secondarycontroller.y().onTrue(Index.indexManual());
+    _secondarycontroller.y().onFalse(Index.indexManualStop());
     _secondarycontroller.x().onTrue(Intake.intakeManual());
     _secondarycontroller.x().onFalse(Intake.intakeManualStop()); 
     _secondarycontroller.a().onTrue(Intake.intakeManualInverse());
@@ -87,7 +90,7 @@ public class RobotContainer {
     //_secondarycontroller.leftTrigger(0.1).onFalse(Shooter.shootStop());
     //_secondarycontroller.rightTrigger(0.1).whileTrue(Shooter.shootArcBottom());
     //_secondarycontroller.rightTrigger(0.1).onFalse(Shooter.shootStop()); 
-
+    Shooter.setDefaultCommand(Shooter.shTilt());
     //more swerve copied from kitbot code
     s_Swerve.setDefaultCommand(
       new TeleopSwerve(
@@ -95,7 +98,7 @@ public class RobotContainer {
                 () -> driver.getRawAxis(translationAxis), 
                 () -> driver.getRawAxis(strafeAxis), 
                 () -> -driver.getRawAxis(rotationAxis), 
-                () -> false
+                () -> robotCentric.getAsBoolean()
             )
         );
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
@@ -105,6 +108,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+    return null;
   }
 }

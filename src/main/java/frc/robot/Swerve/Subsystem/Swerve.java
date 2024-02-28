@@ -7,6 +7,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -21,14 +22,17 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Swerve extends SubsystemBase {
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
-    // public Pigeon2 gyro;
-    public static AHRS gyro;
+    public Pigeon2 gyro;
+    //public static AHRS gyro;
 int index =0;
 boolean teleopActive = true; 
+double yaw; 
+
     public Swerve() {
-        // gyro = new Pigeon2(Constants.Swerve.pigeonID);
-        gyro = new AHRS();
-        // gyro.configFactoryDefault();
+        gyro = new Pigeon2(Constants.Swerve.pigeonID);
+       
+        //gyro = new AHRS();
+    // gyro.configFactoryDefault();
       // gyro.calibrate();
 
         try {
@@ -78,13 +82,13 @@ boolean teleopActive = true;
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(// the ? and : are shortform for an if else statement. boolean ? (if true) : (else)
                                     translation.getX(), 
                                     translation.getY(), 
-                                    rotation, 
+                                    -rotation/15, 
                                     getYaw()
                                 )
                                 : new ChassisSpeeds(
                                     translation.getX(), 
                                     translation.getY(), 
-                                    rotation)
+                                    rotation/15)
                                 );
                                 
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
@@ -175,12 +179,14 @@ boolean teleopActive = true;
 
     public void zeroGyro(){
         SmartDashboard.putBoolean("zerogyro", true);
-        gyro.zeroYaw();
+        //gyro.zeroYaw();
+        gyro.reset(); 
     }
 
-    public static Rotation2d getYaw() {
+    //this was static. now is not. use "Swerve.getYaw()" if needed outside this file
+    public Rotation2d getYaw() {
         //System.out.println((Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees(360 - gyro.getYaw()) : Rotation2d.fromDegrees(gyro.getYaw()));
-        return (Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees(360 - gyro.getYaw()) : Rotation2d.fromDegrees(gyro.getYaw());
+        return (Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees(360 - yaw) : Rotation2d.fromDegrees(yaw);
                                              
     }
 
@@ -205,6 +211,7 @@ boolean teleopActive = true;
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getPosition().angle.getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
         }*/
+        yaw = gyro.getYaw().getValueAsDouble();
 
         SmartDashboard.putBoolean("TELEOP ACTIVE", teleopActive);
     }
