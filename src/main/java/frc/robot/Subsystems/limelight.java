@@ -49,6 +49,40 @@ public class limelight extends SubsystemBase {
         return position[item];
     }
 
+
+//this is needed for some of my code, i have not had time to test any of this. Jamie
+     /** 
+    * @return {x,y,z}
+    */
+    public double[] botpose(){//This stuff is from Jamie`s Code
+        //swap();//this is not in this one?
+        return botpose.getDoubleArray(new double[]{0,0,0});
+    }
+
+     ///TEST GOD TEST THIS      this might not work, we have not had time to test.
+     public boolean isvaildTarget(){//This stuff is from Jamie`s Code
+        startTime = System.currentTimeMillis();
+        saveTime = startTime;
+        while (System.currentTimeMillis()-startTime < 5){
+            if(V() == 1){
+                flag = true;
+            }
+            else {
+                flag = false;
+                saveTime = System.currentTimeMillis();
+            }
+
+            if(System.currentTimeMillis() - saveTime > 3 && flag){
+                return true;
+            }
+            // else if(saveTime-startTime > 3){
+            //     return false;
+            // }
+        }
+        return false;
+    }
+
+    
     @Override
     public void periodic(){
         //read values periodically
