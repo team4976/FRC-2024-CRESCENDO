@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Swerve.Subsystem.Swerve;
 import frc.robot.Subsystems.Shooter;
 import frc.robot.Subsystems.limelight;
+import frc.robot.Subsystems.index;
 
 public class speakerAim extends Command {
     private boolean isFinished;
@@ -20,7 +21,8 @@ public class speakerAim extends Command {
     private double speakerTarget; 
     private Swerve a_Swerve; 
     private Shooter a_Shooter; 
-    private limelight a_l;
+    private limelight a_l = new limelight();
+    private index a_Index = new index(); 
     PIDController pidT = new PIDController(0.015, 0, 0);
     PIDController pidF = new PIDController(0.015, 0, 0);
     PIDController pidH = new PIDController(0.015, 0, 0); 
@@ -33,14 +35,14 @@ public class speakerAim extends Command {
 
     @Override 
     public void initialize() {
-        //a_Swerve.teleopToggle(); 
+        a_Swerve.teleopToggle(); 
         botPositioned = false;
         shooterAimed = false;
         isFinished = false; //idk if i have to set it but better safe than sorry
         pidT.setTolerance(5.0);
         pidF.setTolerance(5.0);
         pidH.setTolerance(5.0); 
-        speakerTarget = 3; 
+        speakerTarget = 4; 
         //NOTE: ADD CODE TO DETERMINE WHICH TAG BY ALLIANCE COLOUR LATER
     }
 
@@ -50,10 +52,10 @@ public class speakerAim extends Command {
             if (a_l.THor() < distMax && a_l.THor() > distMin && a_l.X() < hMax && a_l.X() > hMin){
                 botPositioned = true; 
             }
-            if (!shooterAimed){
+           /*  if (!shooterAimed){
                 a_Shooter.shAim(0.0);
                 shooterAimed = true; 
-            }
+            }*/
             
             if (!botPositioned){
                 //point at target and drive at it. distances changeable see setpoints
@@ -61,7 +63,8 @@ public class speakerAim extends Command {
                 - pidT.calculate(a_l.X(), hSetpoint), false, true);
             }
             if (botPositioned){
-                a_Shooter.shootManual();
+                //a_Shooter.shootManual();
+                //a_Index.runIndexIn(); 
                 isFinished = true; 
             }
         }
@@ -72,8 +75,9 @@ public class speakerAim extends Command {
     }
 
     public void end(){
-        //a_Swerve.teleopToggle();
-        //TODO put these back once swerve gets called 
+        a_Swerve.teleopToggle();
+        //TODO put these back once swerve gets called
+        //stop motors somehow
     }
 
     @Override

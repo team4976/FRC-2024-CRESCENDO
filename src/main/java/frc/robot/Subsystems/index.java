@@ -20,14 +20,14 @@ public class index extends SubsystemBase{
 
     }
 //the run commands take the note into the pizza box. the rev commands push it out. 
-//"-In" puts the note between the wheels. "-Out" pushes it through when it's already in there
+//what these commands did before is no longer what they do but i am too tired to parse
     public void runIndexIn(){
             m_IndexTalon.set(ControlMode.PercentOutput, -0.35);
             indexManual = false; 
     } 
 
     public void runIndexOut(){
-        System.out.println("STOP IND"); 
+        //System.out.println("STOP IND"); 
         //stop when note is not In There
         if (!indexManual){
         m_IndexTalon.set(ControlMode.PercentOutput, 0);
