@@ -19,6 +19,7 @@ import frc.robot.Commands.intake_in;
 import frc.robot.Subsystems.Shooter;
 import frc.robot.Subsystems.index;
 import frc.robot.Subsystems.intake;
+import frc.robot.Subsystems.elevator;
 import frc.robot.Swerve.Subsystem.Swerve;
 import frc.robot.Swerve.commands.TeleopSwerve;
 import frc.robot.Swerve.commands.drive;
@@ -44,6 +45,7 @@ public class RobotContainer {
   Shooter Shooter = new Shooter(_secondarycontroller); 
   index Index = new index();
   intake Intake = new intake (Index);
+  elevator Elevator = new elevator(); 
   public BooleanSupplier noteCheck = () -> Index.noteIndexed();
 // public final drive s_drive = new drive(s_Swerve); 
 
@@ -58,8 +60,12 @@ public class RobotContainer {
     //_secondarycontroller.axisLessThan(5, -0.1).on
     
 
-    //_secondarycontroller.povDown().onTrue(Shooter.shAim(RobotConstants.ampAngle())); 
-    //_secondarycontroller.povUp().onTrue(Shooter.shAim(RobotConstants.speakerAngle()));
+    _secondarycontroller.povDown().whileTrue(Elevator.reverse()); 
+    _secondarycontroller.povDown().onFalse(Elevator.stop());
+    _secondarycontroller.povUp().whileTrue(Elevator.elevate());
+    _secondarycontroller.povUp().onFalse(Elevator.stop()); 
+    _secondarycontroller.povLeft().onTrue(Elevator.home()); 
+
 
     _primarycontroller.x().onTrue(Intake.runIntake());
     new Trigger(noteCheck).onTrue(Intake.stopIntake());

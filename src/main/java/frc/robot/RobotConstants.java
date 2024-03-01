@@ -12,14 +12,18 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.Servo;
 //import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+
 
 public final class RobotConstants {
 
 //controllers
 public static final  CommandXboxController _primarycontroller = new CommandXboxController(0);
 public static final  CommandXboxController _secondarycontroller = new CommandXboxController(1);
+
+public static final Servo _ratchet = new Servo(2); 
 
 //motors n whatnot
     //shooter
@@ -32,8 +36,8 @@ public static final  CommandXboxController _secondarycontroller = new CommandXbo
     //intake
     public static final TalonSRX m_IntakeTalon = new TalonSRX(47);
     //elevator
-    public static final TalonSRX m_ElevatorTalon = new TalonSRX(45);
-    public static final VictorSPX m_ElevatorVictor = new VictorSPX(46);
+    public static final TalonSRX m_ElevatorTalon = new TalonSRX(46); //PUT BACK
+    public static final TalonSRX m_ElevatorTalonB = new TalonSRX(45); 
     //idk is there anything else we need?
 //variables
     public static double speakerAngle(){
@@ -74,7 +78,7 @@ public static final  CommandXboxController _secondarycontroller = new CommandXbo
             m_AngleSpark.set(0);
             m_AngleSparkB.set(0);
             m_ElevatorTalon.set(ControlMode.PercentOutput, 0);
-            m_ElevatorVictor.set(ControlMode.PercentOutput, 0);
+            m_ElevatorTalonB.set(ControlMode.PercentOutput, 0);
             m_IndexTalon.set(ControlMode.PercentOutput, 0);
             m_IntakeTalon.set(ControlMode.PercentOutput, 0);
         }
