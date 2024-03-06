@@ -23,6 +23,7 @@ import frc.robot.Subsystems.elevator;
 import frc.robot.Swerve.Subsystem.Swerve;
 import frc.robot.Swerve.commands.TeleopSwerve;
 import frc.robot.Swerve.commands.drive;
+import frc.robot.Autonomous.speakerAim;
 
 import static frc.robot.RobotConstants._primarycontroller;
 import static frc.robot.RobotConstants._secondarycontroller;
@@ -44,6 +45,7 @@ public class RobotContainer {
   private final Swerve s_Swerve = new Swerve();
   Shooter Shooter = new Shooter(_secondarycontroller); 
   index Index = new index();
+  //Command speaker_aim = new speakerAim(s_Swerve);
   intake Intake = new intake (Index);
   elevator Elevator = new elevator(); 
   public BooleanSupplier noteCheck = () -> Index.noteIndexed();
@@ -55,7 +57,7 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    //axis four is right js y 
+    //axis five is right js y 
     //_secondarycontroller.axisGreaterThan(5, 0.1).onTrue(Shooter.shTilt()); 
     //_secondarycontroller.axisLessThan(5, -0.1).on
     
@@ -64,8 +66,7 @@ public class RobotContainer {
     _secondarycontroller.povDown().onFalse(Elevator.stop());
     _secondarycontroller.povUp().whileTrue(Elevator.elevate());
     _secondarycontroller.povUp().onFalse(Elevator.stop()); 
-    _secondarycontroller.povLeft().onTrue(Elevator.home()); 
-
+    _secondarycontroller.rightBumper().onTrue(Elevator.ratchetToggle()); 
 
     _primarycontroller.x().onTrue(Intake.runIntake());
     new Trigger(noteCheck).onTrue(Intake.stopIntake());
@@ -73,11 +74,12 @@ public class RobotContainer {
     //_primarycontroller.x().onFalse(Intake.intakeManualStop());
     //_primarycontroller.a().onFalse(Intake.intakeManualStop());
 
+    _primarycontroller.a().whileTrue(new speakerAim(s_Swerve, Shooter));
     //_primarycontroller.leftBumper().onTrue(Shooter.shootManual());
    // _primarycontroller.leftBumper().onFalse(Shooter.shootStop()); 
     _primarycontroller.rightBumper().onTrue(Index.indexManual());
     _primarycontroller.rightBumper().onFalse(Index.indexManualStop()); 
-    
+
     _secondarycontroller.y().onTrue(Index.indexManual());
     _secondarycontroller.y().onFalse(Index.indexManualStop());
     _secondarycontroller.x().onTrue(Intake.intakeManual());
@@ -89,9 +91,16 @@ public class RobotContainer {
 
     _secondarycontroller.leftBumper().onTrue(Shooter.shootManual());
     _secondarycontroller.leftBumper().onFalse(Shooter.shootStop());
-    //_secondarycontroller.rightBumper().onTrue(Shooter.invertArcBottom());
-    //_secondarycontroller.rightBumper().onFalse(Shooter.shootStop());
-
+  
+    _primarycontroller.povUp().onTrue(s_Swerve.setTurnIdeal(0.0));
+    _primarycontroller.povUp().whileTrue(s_Swerve.locationRotation());
+    _primarycontroller.povDown().onTrue(s_Swerve.setTurnIdeal(180));
+    _primarycontroller.povDown().whileTrue(s_Swerve.locationRotation());
+    _primarycontroller.povRight().onTrue(s_Swerve.setTurnIdeal(90));
+    _primarycontroller.povRight().whileTrue(s_Swerve.locationRotation());
+    _primarycontroller.povLeft().onTrue(s_Swerve.setTurnIdeal(270));
+    _primarycontroller.povLeft().whileTrue(s_Swerve.locationRotation()); 
+    
     //_secondarycontroller.leftTrigger(0.1).whileTrue(Shooter.shootArcTop());
     //_secondarycontroller.leftTrigger(0.1).onFalse(Shooter.shootStop());
     //_secondarycontroller.rightTrigger(0.1).whileTrue(Shooter.shootArcBottom());

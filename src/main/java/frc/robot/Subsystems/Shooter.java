@@ -49,14 +49,15 @@ public class Shooter extends SubsystemBase {
     public Command shAim(double a){ //tilts to position
         return runOnce( () -> {
         //angleEn =  angleSpark.getEncoder().getPosition(); 
-        //m_AngleSpark.getEncoder().setPosition(0); 
+        m_AngleSpark.getEncoder().setPosition(0); 
         m_AngleSpark.getPIDController().setReference(a, CANSparkMax.ControlType.kPosition);
         //CHECK ELEVATOR HEIGHT??
         }); 
     }
     public Command shootIndexed(){ 
         return runOnce( () -> {
-            m_ShooterSpark.set(-0.5);
+            m_ShooterSpark.set(-1);
+            m_ShooterSparkB.set(1); 
             //s_index.runIndexOut();
         });
     }
@@ -66,7 +67,7 @@ public class Shooter extends SubsystemBase {
     public Command shTilt(){
         return run( () -> {
             //if (tiltStopped){ 
-                m_AngleSpark.set(m_ctrl.getRawAxis(5)/3); 
+                m_AngleSpark.set(m_ctrl.getRawAxis(5)/2); 
                 SmartDashboard.putNumber("TILT INPUT", m_ctrl.getRightY()/3);
             //}
         });
@@ -80,8 +81,8 @@ public class Shooter extends SubsystemBase {
     public Command shootManual(){ 
         return runOnce( () -> {
             arcActive = false;
-            m_ShooterSpark.set(-0.5); 
-            m_ShooterSparkB.set(0.5);
+            m_ShooterSpark.set(-1); 
+            m_ShooterSparkB.set(1);
         });
     }
      public Command shootStop(){ 
@@ -94,8 +95,8 @@ public class Shooter extends SubsystemBase {
     }
     public Command shootManualInverse(){ 
         return runOnce( () -> {
-            m_ShooterSpark.set(0.5); 
-            m_ShooterSparkB.set(-0.5);
+            m_ShooterSpark.set(1); 
+            m_ShooterSparkB.set(-1);
 
         });
     }
@@ -144,6 +145,7 @@ public class Shooter extends SubsystemBase {
     @Override
     public void periodic(){
         //SmartDashboard.putBoolean("ARCSHOOTER ACTIVE", arcActive);   
+        SmartDashboard.putNumber("SHOOTER POS", m_AngleSpark.getEncoder().getPosition());
     }
 
 }

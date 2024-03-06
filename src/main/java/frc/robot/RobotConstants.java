@@ -37,7 +37,7 @@ public static final Servo _ratchet = new Servo(2);
     public static final TalonSRX m_IntakeTalon = new TalonSRX(47);
     //elevator
     public static final TalonSRX m_ElevatorTalon = new TalonSRX(46); //PUT BACK
-    public static final TalonSRX m_ElevatorTalonB = new TalonSRX(45); 
+    public static final VictorSPX m_ElevatorVictor = new VictorSPX(45); 
     //idk is there anything else we need?
 //variables
     public static double speakerAngle(){
@@ -78,7 +78,7 @@ public static final Servo _ratchet = new Servo(2);
             m_AngleSpark.set(0);
             m_AngleSparkB.set(0);
             m_ElevatorTalon.set(ControlMode.PercentOutput, 0);
-            m_ElevatorTalonB.set(ControlMode.PercentOutput, 0);
+            m_ElevatorVictor.set(ControlMode.PercentOutput, 0);
             m_IndexTalon.set(ControlMode.PercentOutput, 0);
             m_IntakeTalon.set(ControlMode.PercentOutput, 0);
         }

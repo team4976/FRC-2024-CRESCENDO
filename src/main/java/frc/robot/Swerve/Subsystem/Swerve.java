@@ -10,6 +10,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -24,13 +25,18 @@ public class Swerve extends SubsystemBase {
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
     //public static AHRS gyro;
+
+    
+    PIDController pidS = new PIDController(0.15, 0, 0);
 int index =0;
 boolean teleopActive = true; 
 double yaw; 
+double turnPos; 
+
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
-       
+       pidS.setTolerance(7);
         //gyro = new AHRS();
     // gyro.configFactoryDefault();
       // gyro.calibrate();
@@ -115,7 +121,7 @@ double yaw;
         //SmartDashboard.putNumber("TEST2", index);
         index++;
         //System.out.println(teleopActive); 
-        System.out.println("L");
+        //System.out.println("L");
         SwerveModuleState[] swerveModuleStates =
             Constants.Swerve.swerveKinematics.toSwerveModuleStates(
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(// the ? and : are shortform for an if else statement. boolean ? (if true) : (else)
@@ -190,6 +196,29 @@ double yaw;
                                              
     }
 
+    public Command setTurnIdeal( double p){
+        return runOnce( () -> {
+            turnPos = p; 
+            if (yaw > 360){
+                turnPos+=360; 
+            }
+            if (yaw < -360){
+                turnPos+= -360;
+            }
+            if (yaw < 0){
+                turnPos = turnPos - 360; 
+            }
+
+        });
+    }
+
+    public Command locationRotation(){
+        return runOnce( () -> {
+            driveLime(new Translation2d(0, 0),
+                pidS.calculate(yaw, turnPos), true, true);
+        });
+    }
+
     public void resetModulesToAbsolute(){
         for(SwerveModule mod : mSwerveMods){
             mod.resetToAbsolute();
@@ -214,6 +243,8 @@ double yaw;
         yaw = gyro.getYaw().getValueAsDouble();
 
         SmartDashboard.putBoolean("TELEOP ACTIVE", teleopActive);
+        SmartDashboard.putNumber("PIGEON YAW", yaw);
+        SmartDashboard.putNumber("TURNPOS", turnPos);
     }
 
 }
