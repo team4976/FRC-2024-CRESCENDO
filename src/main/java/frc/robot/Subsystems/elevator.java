@@ -8,16 +8,22 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 //motor import
 import static frc.robot.RobotConstants.m_ElevatorTalon;
 import static frc.robot.RobotConstants.m_ElevatorVictor;
-import static frc.robot.RobotConstants.elevator_position;
 import static frc.robot.RobotConstants._ratchet;
+import static frc.robot.RobotConstants._elevatorLimit;
 
 public class elevator extends SubsystemBase{
-    boolean ratcheted = false; 
+    boolean ratcheted; 
+
+    public elevator(){
+        ratcheted = false; 
+        m_ElevatorTalon.setSelectedSensorPosition(0);
+        m_ElevatorVictor.setSelectedSensorPosition(0); 
+    }
+
     public Command elevate(){
         return runOnce( () -> { 
             m_ElevatorTalon.set(ControlMode.PercentOutput,-0.5);
             m_ElevatorVictor.set(ControlMode.PercentOutput, 0.5);
-            elevator_position = m_ElevatorTalon.getSelectedSensorPosition();
         });
     }
     public Command reverse(){
@@ -25,13 +31,18 @@ public class elevator extends SubsystemBase{
             _ratchet.set(0.65); 
             m_ElevatorTalon.set(ControlMode.PercentOutput,0.5);
             m_ElevatorVictor.set(ControlMode.PercentOutput, -0.5);
-            elevator_position = m_ElevatorTalon.getSelectedSensorPosition();
         });
     }
     public Command home(){
         return runOnce( () -> {
-            m_ElevatorTalon.set(ControlMode.Position, 0);
-            m_ElevatorVictor.set(ControlMode.Position, 0); 
+            if (!_elevatorLimit.get()){
+                m_ElevatorTalon.set(ControlMode.PercentOutput,0.5);
+                m_ElevatorVictor.set(ControlMode.PercentOutput, -0.5);
+            }
+            else{
+                m_ElevatorTalon.set(ControlMode.PercentOutput, 0); 
+                m_ElevatorVictor.set(ControlMode.PercentOutput, 0); 
+            }
         });
     }
     public Command stop(){
@@ -53,8 +64,11 @@ public class elevator extends SubsystemBase{
             }
         }); 
     }
+
     @Override
     public void periodic(){
         SmartDashboard.putNumber("ratchet angle", _ratchet.getAngle());
+        SmartDashboard.putNumber("Elevator Vic SensorPos", m_ElevatorVictor.getSelectedSensorPosition());
+        SmartDashboard.putNumber("Elevator Tal SensprPos", m_ElevatorTalon.getSelectedSensorPosition());
     }
 }

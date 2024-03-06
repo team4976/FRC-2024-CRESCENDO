@@ -12,6 +12,7 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Servo;
 //import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -24,6 +25,8 @@ public static final  CommandXboxController _primarycontroller = new CommandXboxC
 public static final  CommandXboxController _secondarycontroller = new CommandXboxController(1);
 
 public static final Servo _ratchet = new Servo(2); 
+public static final DigitalInput _elevatorLimit = new DigitalInput(0); 
+public static final DigitalInput _tiltLimit = new DigitalInput(1); 
 
 //motors n whatnot
     //shooter
@@ -51,7 +54,7 @@ public static final Servo _ratchet = new Servo(2);
     public static double elevator_threshold = 1;
     public static double shooter_threshold = 1;
     public static BooleanSupplier elevator_up = () -> m_ElevatorTalon.getSelectedSensorPosition() > elevator_threshold;
-
+    public static BooleanSupplier tiltLimit = () -> _tiltLimit.get();
         public static final class AutoConstants { //TODO: The below constants must be tuned to the robot
         public static final double kMaxSpeedMetersPerSecond = 3;
         public static final double kMaxAccelerationMetersPerSecondSquared = 3;

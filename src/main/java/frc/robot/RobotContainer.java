@@ -24,9 +24,11 @@ import frc.robot.Swerve.Subsystem.Swerve;
 import frc.robot.Swerve.commands.TeleopSwerve;
 import frc.robot.Swerve.commands.drive;
 import frc.robot.Autonomous.speakerAim;
+import frc.robot.Autonomous.autoexp;
 
 import static frc.robot.RobotConstants._primarycontroller;
 import static frc.robot.RobotConstants._secondarycontroller;
+import static frc.robot.RobotConstants.tiltLimit;
 
 public class RobotContainer {
   
@@ -67,6 +69,8 @@ public class RobotContainer {
     _secondarycontroller.povUp().whileTrue(Elevator.elevate());
     _secondarycontroller.povUp().onFalse(Elevator.stop()); 
     _secondarycontroller.rightBumper().onTrue(Elevator.ratchetToggle()); 
+    _secondarycontroller.povLeft().whileTrue(Elevator.home());
+    _secondarycontroller.povLeft().onFalse(Elevator.stop());
 
     _primarycontroller.x().onTrue(Intake.runIntake());
     new Trigger(noteCheck).onTrue(Intake.stopIntake());
@@ -74,7 +78,7 @@ public class RobotContainer {
     //_primarycontroller.x().onFalse(Intake.intakeManualStop());
     //_primarycontroller.a().onFalse(Intake.intakeManualStop());
 
-    _primarycontroller.a().whileTrue(new speakerAim(s_Swerve, Shooter));
+    //_primarycontroller.a().whileTrue(new speakerAim(s_Swerve, Shooter));
     //_primarycontroller.leftBumper().onTrue(Shooter.shootManual());
    // _primarycontroller.leftBumper().onFalse(Shooter.shootStop()); 
     _primarycontroller.rightBumper().onTrue(Index.indexManual());
@@ -92,6 +96,7 @@ public class RobotContainer {
     _secondarycontroller.leftBumper().onTrue(Shooter.shootManual());
     _secondarycontroller.leftBumper().onFalse(Shooter.shootStop());
   
+    /* 
     _primarycontroller.povUp().onTrue(s_Swerve.setTurnIdeal(0.0));
     _primarycontroller.povUp().whileTrue(s_Swerve.locationRotation());
     _primarycontroller.povDown().onTrue(s_Swerve.setTurnIdeal(180));
@@ -100,12 +105,14 @@ public class RobotContainer {
     _primarycontroller.povRight().whileTrue(s_Swerve.locationRotation());
     _primarycontroller.povLeft().onTrue(s_Swerve.setTurnIdeal(270));
     _primarycontroller.povLeft().whileTrue(s_Swerve.locationRotation()); 
+    */
     
     //_secondarycontroller.leftTrigger(0.1).whileTrue(Shooter.shootArcTop());
     //_secondarycontroller.leftTrigger(0.1).onFalse(Shooter.shootStop());
     //_secondarycontroller.rightTrigger(0.1).whileTrue(Shooter.shootArcBottom());
     //_secondarycontroller.rightTrigger(0.1).onFalse(Shooter.shootStop()); 
     Shooter.setDefaultCommand(Shooter.shTilt());
+    new Trigger(tiltLimit).whileTrue(Shooter.encoderZero());
     //more swerve copied from kitbot code
     s_Swerve.setDefaultCommand(
       new TeleopSwerve(
@@ -123,6 +130,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return null;
+    return new autoexp(s_Swerve, Intake, Shooter, Index);
   }
 }

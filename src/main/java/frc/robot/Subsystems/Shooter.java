@@ -49,9 +49,7 @@ public class Shooter extends SubsystemBase {
     public Command shAim(double a){ //tilts to position
         return runOnce( () -> {
         //angleEn =  angleSpark.getEncoder().getPosition(); 
-        m_AngleSpark.getEncoder().setPosition(0); 
         m_AngleSpark.getPIDController().setReference(a, CANSparkMax.ControlType.kPosition);
-        //CHECK ELEVATOR HEIGHT??
         }); 
     }
     public Command shootIndexed(){ 
@@ -61,7 +59,11 @@ public class Shooter extends SubsystemBase {
             //s_index.runIndexOut();
         });
     }
-   
+   public Command encoderZero(){
+    return runOnce( () -> {
+        m_AngleSpark.getEncoder().setPosition(0);
+    });
+   }
     
     //manual control commands
     public Command shTilt(){
@@ -81,8 +83,8 @@ public class Shooter extends SubsystemBase {
     public Command shootManual(){ 
         return runOnce( () -> {
             arcActive = false;
-            m_ShooterSpark.set(-1); 
-            m_ShooterSparkB.set(1);
+            m_ShooterSpark.set(-0.5); 
+            m_ShooterSparkB.set(0.5);
         });
     }
      public Command shootStop(){ 
@@ -95,8 +97,8 @@ public class Shooter extends SubsystemBase {
     }
     public Command shootManualInverse(){ 
         return runOnce( () -> {
-            m_ShooterSpark.set(1); 
-            m_ShooterSparkB.set(-1);
+            m_ShooterSpark.set(0.5); 
+            m_ShooterSparkB.set(-0.5);
 
         });
     }
