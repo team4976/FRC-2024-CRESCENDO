@@ -35,7 +35,7 @@ public class elevator extends SubsystemBase{
     }
     public Command home(){
         return runOnce( () -> {
-            if (!_elevatorLimit.get()){
+            if (_elevatorLimit.get()){
                 m_ElevatorTalon.set(ControlMode.PercentOutput,0.5);
                 m_ElevatorVictor.set(ControlMode.PercentOutput, -0.5);
             }
@@ -70,5 +70,6 @@ public class elevator extends SubsystemBase{
         SmartDashboard.putNumber("ratchet angle", _ratchet.getAngle());
         SmartDashboard.putNumber("Elevator Vic SensorPos", m_ElevatorVictor.getSelectedSensorPosition());
         SmartDashboard.putNumber("Elevator Tal SensprPos", m_ElevatorTalon.getSelectedSensorPosition());
+        SmartDashboard.putBoolean("ELEVATOT LIMIT", _elevatorLimit.get()); 
     }
 }

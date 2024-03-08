@@ -88,13 +88,13 @@ double turnPos;
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(// the ? and : are shortform for an if else statement. boolean ? (if true) : (else)
                                     translation.getX(), 
                                     translation.getY(), 
-                                    -rotation/15, 
+                                    -rotation/5, 
                                     getYaw()
                                 )
                                 : new ChassisSpeeds(
                                     translation.getX(), 
                                     translation.getY(), 
-                                    rotation/15)
+                                    rotation/5)
                                 );
                                 
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);

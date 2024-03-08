@@ -64,12 +64,12 @@ public class RobotContainer {
     //_secondarycontroller.axisLessThan(5, -0.1).on
     
 
-    _secondarycontroller.povDown().whileTrue(Elevator.reverse()); 
+    _secondarycontroller.povDown().whileTrue(Elevator.home()); 
     _secondarycontroller.povDown().onFalse(Elevator.stop());
     _secondarycontroller.povUp().whileTrue(Elevator.elevate());
     _secondarycontroller.povUp().onFalse(Elevator.stop()); 
     _secondarycontroller.rightBumper().onTrue(Elevator.ratchetToggle()); 
-    _secondarycontroller.povLeft().whileTrue(Elevator.home());
+    _secondarycontroller.povLeft().whileTrue(Elevator.reverse());
     _secondarycontroller.povLeft().onFalse(Elevator.stop());
 
     _primarycontroller.x().onTrue(Intake.runIntake());
@@ -112,7 +112,7 @@ public class RobotContainer {
     //_secondarycontroller.rightTrigger(0.1).whileTrue(Shooter.shootArcBottom());
     //_secondarycontroller.rightTrigger(0.1).onFalse(Shooter.shootStop()); 
     Shooter.setDefaultCommand(Shooter.shTilt());
-    new Trigger(tiltLimit).whileTrue(Shooter.encoderZero());
+    new Trigger(tiltLimit).whileFalse(Shooter.encoderZero());
     //more swerve copied from kitbot code
     s_Swerve.setDefaultCommand(
       new TeleopSwerve(
