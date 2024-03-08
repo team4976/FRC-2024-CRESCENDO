@@ -48,7 +48,9 @@ public class limelight extends SubsystemBase {
     public double Position(int item){
         return position[item];
     }
-
+   public double[] BotPose(){
+     return botpose.getDoubleArray(position);   
+    }
 
 //this is needed for some of my code, i have not had time to test any of this. Jamie
      /** 
