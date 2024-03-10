@@ -81,11 +81,10 @@ public final class Constants {
 
         /* Swerve Profiling Values */
         /** Meters per Second */
-        public static final double maxSpeed = 0.3; //TODO: This must be tuned to specific robot //4.5 set to 0.5 to make testing safer
+        public static final double maxSpeed = 4.5; //TODO: This must be tuned to specific robot 
         /** Radians per Second */
         //takes input, divides by max velocity
-        //NOT USED. 
-        public static final double maxAngularVelocity = 2.0; 
+        public static final double maxAngularVelocity = 5.0; 
 
         /* Neutral Modes */
         public static final NeutralMode angleNeutralMode = NeutralMode.Coast;
@@ -98,7 +97,7 @@ public final class Constants {
             public static final int driveMotorID = 11;
             public static final int angleMotorID = 21;
            
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(245.30);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(220);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }

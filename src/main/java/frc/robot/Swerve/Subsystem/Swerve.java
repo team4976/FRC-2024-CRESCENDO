@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+
 public class Swerve extends SubsystemBase {
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
@@ -88,13 +89,13 @@ double turnPos;
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(// the ? and : are shortform for an if else statement. boolean ? (if true) : (else)
                                     translation.getX(), 
                                     translation.getY(), 
-                                    -rotation/5, 
+                                    -rotation, 
                                     getYaw()
                                 )
                                 : new ChassisSpeeds(
                                     translation.getX(), 
                                     translation.getY(), 
-                                    rotation/5)
+                                    rotation/Constants.Swerve.maxAngularVelocity)
                                 );
                                 
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);

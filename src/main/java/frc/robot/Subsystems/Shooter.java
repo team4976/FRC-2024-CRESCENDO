@@ -1,36 +1,39 @@
 package frc.robot.Subsystems;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
+//import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.revrobotics.CANSparkBase;
+//import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
+//import com.revrobotics.CANSparkLowLevel.MotorType;
+//import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
+//import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import static frc.robot.RobotConstants._tiltLimit;
+import static frc.robot.RobotConstants._tiltUpLimit;  
 import static frc.robot.RobotConstants.m_AngleSpark;
 import static frc.robot.RobotConstants.m_AngleSparkB;
 import static frc.robot.RobotConstants.m_ShooterSpark;
 import static frc.robot.RobotConstants.m_ShooterSparkB;
-import static frc.robot.RobotConstants.tiltLimit;
-import static frc.robot.RobotConstants.m_IndexTalon;
-//import frc.robot.Subsystems.index;
+import static frc.robot.RobotConstants.shooter_speed;
+//import static frc.robot.RobotConstants.m_IndexTalon;
+import frc.robot.Subsystems.index;
 
 
 public class Shooter extends SubsystemBase {
     //define motors. 
-    private final index s_index = new index(); 
+    private final index s_index; 
 
     private final CommandXboxController m_ctrl; 
     private final GenericHID a_ctrl = new GenericHID(0);   
-    //elevator
+    private final PIDController PIDtilt = new PIDController(0.015, 0, 0);
 
     double angleEn = 0; 
     double tiltAxis; 
@@ -39,9 +42,10 @@ public class Shooter extends SubsystemBase {
     boolean tiltStopped; 
     boolean arcActive; 
 
-    public Shooter(CommandXboxController c) {
-        m_ctrl = c; 
-        m_AngleSpark.getPIDController().setP(0.015);
+    public Shooter(CommandXboxController c, index i) {
+        m_ctrl = c;
+        s_index = i;  
+        //m_AngleSpark.getPIDController().setP(0.015);
         m_ShooterSparkB.setInverted(true);
         //m_ShooterSparkB.follow(m_ShooterSparkB);  
         //m_AngleSparkB.follow(m_AngleSpark); 
@@ -55,50 +59,63 @@ public class Shooter extends SubsystemBase {
     public Command shAim(double a){ //tilts to position
         return runOnce( () -> {
         //angleEn =  angleSpark.getEncoder().getPosition(); 
-        m_AngleSpark.getPIDController().setReference(a, CANSparkMax.ControlType.kPosition);
+        //m_AngleSpark.getPIDController().setReference(a, CANSparkBase.ControlType.kPosition);
+        m_AngleSpark.set(PIDtilt.calculate(m_AngleSpark.getEncoder().getPosition(), a));
         }); 
     }
+    //for amp shooting. runs indexer and shooter simultaneously to gently eject note
     public Command shootIndexed(){ 
         return runOnce( () -> {
-            m_ShooterSpark.set(-1);
-            m_ShooterSparkB.set(1); 
-            //s_index.runIndexOut();
+            m_ShooterSpark.set(-shooter_speed);
+            m_ShooterSparkB.set(shooter_speed); 
+            s_index.indexManual();
+        });
+    } //stop for amp shooting
+    public Command stopIndexed(){
+        return runOnce( () -> {
+            m_ShooterSpark.set(0);
+            m_ShooterSparkB.set(0); 
+            s_index.indexManualStop();
         });
     }
-   public Command encoderZero(){
+   public Command encoderZero(){ //for arm tilt. called when limit hit
     return runOnce( () -> {
         m_AngleSpark.getEncoder().setPosition(0);
     });
    }
     
     //manual control commands
-    public Command shTilt(){
+    //ARM TILT
+    public Command shTilt(){ //set as 'default command' to constantly check
         return run( () -> {
             tiltAxis = m_ctrl.getRawAxis(5); 
-            if (!_tiltLimit.get() && tiltAxis > 0){
+            if (!_tiltLimit.get() && tiltAxis > 0){ //if down limit hit, can't go down
+                tiltAxis = 0; 
+            }
+            if (!_tiltUpLimit.get() && tiltAxis < 0){ //if up limit hit, can't go up
                 tiltAxis = 0; 
             }
             m_AngleSpark.set(tiltAxis/2); 
             SmartDashboard.putNumber("TILT INPUT", tiltAxis/2);
         });
     }
-
     public Command tiltStop(){
         return runOnce( () -> {
-            tiltStopped = true; 
+            tiltStopped = true; //boolean not used at current
             m_AngleSpark.set(0); 
         });
     }
+    //SHOOTER
     public Command shootManual(){ 
         return runOnce( () -> {
-            arcActive = false;
-            m_ShooterSpark.set(-1); 
-            m_ShooterSparkB.set(1);
+            //arcActive = false;
+            m_ShooterSpark.set(-shooter_speed); 
+            m_ShooterSparkB.set(shooter_speed);
         });
     }
      public Command shootStop(){ 
         return runOnce( () -> {
-            arcActive = false;
+            //arcActive = false;
             m_ShooterSpark.set(0);
             m_ShooterSparkB.set(0);
             
@@ -106,13 +123,18 @@ public class Shooter extends SubsystemBase {
     }
     public Command shootManualInverse(){ 
         return runOnce( () -> {
-            m_ShooterSpark.set(1); 
-            m_ShooterSparkB.set(-1);
+            m_ShooterSpark.set(shooter_speed); 
+            m_ShooterSparkB.set(-shooter_speed);
 
         });
     }
 
-    //"Arcade Shooter" bound to operator triggers and bumpers
+    public void shootAuto(){
+        m_ShooterSpark.set(-shooter_speed); 
+        m_ShooterSparkB.set(shooter_speed);
+    }
+
+    //"Arcade Shooter" bound to operator triggers and bumpers. nonfunctional, not used in container
     public Command shootArcTop(){
         return run( () -> {
             if (arcActive){
@@ -158,9 +180,10 @@ public class Shooter extends SubsystemBase {
         //SmartDashboard.putBoolean("ARCSHOOTER ACTIVE", arcActive);   
         SmartDashboard.putNumber("SHOOTER POS", m_AngleSpark.getEncoder().getPosition());
         SmartDashboard.putBoolean("TILT LIMIT", _tiltLimit.get());
+        SmartDashboard.putBoolean("TILTBACK LIMIT", _tiltUpLimit.get()); 
         
         if (_tiltLimit.get()){
-            a_ctrl.setRumble(RumbleType.kBothRumble, 1.0);
+            a_ctrl.setRumble(RumbleType.kBothRumble, 0.0);
         }
         else{
             a_ctrl.setRumble(RumbleType.kBothRumble, 0.0);

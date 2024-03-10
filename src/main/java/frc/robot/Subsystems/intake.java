@@ -19,13 +19,19 @@ public class intake extends SubsystemBase{
     public intake(index dex){
         i_index = dex; 
     }
+    //run intake AND current-sensitive index
     public Command runIntake(){
         return runOnce( () -> {
             m_IntakeTalon.set(ControlMode.PercentOutput,-0.7);
             i_index.runIndexIn();
         }); 
     }
-
+    //same as above, but a void so it works in the autos
+    public void runIntakeAuto(){
+        m_IntakeTalon.set(ControlMode.PercentOutput,-0.7);
+        i_index.runIndexIn();    
+    }
+    //stops intake and index hard. only called on current index button
     public Command stopIntake(){
         return runOnce ( () -> {
             //System.out.println("STOP INT");
@@ -34,31 +40,25 @@ public class intake extends SubsystemBase{
         });
     }
 
-
+    //MANUAL CONTROLS
+    //does not run index, just intake
     public Command intakeManual(){ 
         return runOnce( () -> {
             
             //System.out.println("START");
             m_IntakeTalon.set(ControlMode.PercentOutput, -0.7); 
-            //m_IndexTalon.set(ControlMode.PercentOutput, -0.35); 
         });
     }
     public Command intakeManualStop(){ 
         return runOnce( () -> {
             //System.out.println("STOP");
             m_IntakeTalon.set(ControlMode.PercentOutput, 0); 
-            //m_IndexTalon.set(ControlMode.PercentOutput, 0); 
         });
     }
-    public Command intakeManualInverse(){ //theoretically could be bound to an axis if so desired
+    public Command intakeManualInverse(){ 
         return runOnce( () -> {
             m_IntakeTalon.set(ControlMode.PercentOutput, 0.5); 
-            //m_IndexTalon.set(ControlMode.PercentOutput, 0.35); 
         });
-    }
-
-    public void invertIntake(){
-        m_IntakeTalon.set(ControlMode.PercentOutput,-.2);
     }
 
     @Override

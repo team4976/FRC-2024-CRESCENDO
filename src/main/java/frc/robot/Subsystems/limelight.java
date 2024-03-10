@@ -29,22 +29,22 @@ public class limelight extends SubsystemBase {
 
     //callable values for other classes
     public double X(){
-        return x; 
+        return x; //horizontal offset of target from crosshairs
     }
     public double Y(){
-        return y;
+        return y; //vertical offset of target from crosshairs
     }
     public double Area(){
-        return area;
+        return area; //%Area of camera covered by target
     }
     public double V(){
-        return v; 
+        return v; //0 no target, 1 target present
     }
     public double THor(){
-        return th; 
+        return th; //horizontal sidelength of bounding box (can be used for distance)
     }
     public double ID(){
-        return id; 
+        return id; //ID of apriltag read
     }
     public double Position(int item){
         return position[item];
@@ -53,14 +53,16 @@ public class limelight extends SubsystemBase {
     @Override
     public void periodic(){
         //read values periodically
-        x = tx.getDouble(0.0);
-        y = ty.getDouble(0.0);
         v = tv.getDouble(0.0); 
-        area = ta.getDouble(0.0);
-        th = thor.getDouble(0.0);
-        id = tid.getDouble(0.0); 
-
+        if (v == 1){ //if no tag present, retains it's last read value. useful if read is flickering
+            x = tx.getDouble(0.0);
+            y = ty.getDouble(0.0);
+            area = ta.getDouble(0.0);
+            th = thor.getDouble(0.0);
+            id = tid.getDouble(0.0); 
+        }
         SmartDashboard.putNumber("LL ID", id); 
         SmartDashboard.putNumber("TARGET HOR", th);
+        SmartDashboard.putNumber("Tag?", v);
     }
 }

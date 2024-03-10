@@ -12,7 +12,7 @@ public class intake_out extends Command{
 
     @Override
     public void initialize(){
-        Intake.invertIntake();
+        //Intake.invertIntake();
         super.initialize();
     }
     @Override

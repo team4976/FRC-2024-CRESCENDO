@@ -12,6 +12,7 @@ public class index extends SubsystemBase{
     boolean noteIn;
     boolean indexManual; 
     double vel; 
+    double vol;
     //calibrated
     double noteDetectVelocity = 10;
     double noteNoneVelocity = 10; 
@@ -19,21 +20,23 @@ public class index extends SubsystemBase{
     public index(){
 
     }
-//the run commands take the note into the pizza box. the rev commands push it out. 
-//what these commands did before is no longer what they do but i am too tired to parse
+ //run command and allow runindexout to stop it on the current trigger
     public void runIndexIn(){
             m_IndexTalon.set(ControlMode.PercentOutput, -0.35);
             indexManual = false; 
     } 
 
-    public void runIndexOut(){
+    public void runIndexOut(){ //this is a stop. an auto stop. for the current-button in bot container
+        //name is weird it didn't always do this.
         //System.out.println("STOP IND"); 
-        //stop when note is not In There
+        //stop when note is in there
         if (!indexManual){
         m_IndexTalon.set(ControlMode.PercentOutput, 0);
         }
     }
 
+    //not used. theoretically, current based index reverse, which we don't need
+    //if this is ever needed fix it so it works first
     public void revIndexIn(){
         while (!noteIn){
             m_IndexTalon.set(ControlMode.PercentOutput, 0.35);
@@ -47,7 +50,8 @@ public class index extends SubsystemBase{
         }
         m_IndexTalon.set(ControlMode.PercentOutput, 0);
     }
-//MANUAL CONTROLS HERE
+
+    //MANUAL CONTROLS HERE
     public Command indexManual(){ 
         return runOnce( () -> {
             indexManual = true; 
@@ -66,14 +70,17 @@ public class index extends SubsystemBase{
     }
     
     
-    public boolean noteIndexed(){
+    public boolean noteIndexed(){ //IS USED FOR THE BOOLEANSUPPLIER NOTECHECK IN BOT CONTAINER!
         return noteIn; 
     }
 
     @Override
     public void periodic(){
         vel = m_IndexTalon.getSupplyCurrent();
-        if (vel > noteDetectVelocity && m_IntakeTalon.getSupplyCurrent() < noteNoneVelocity){ //threshold for "there is definitely a note in here"
+        vol = m_IntakeTalon.getSupplyCurrent();
+        //I will be honest with you we messed with this so much I have no idea what's happening
+        //it does work. but the variables might need readjusting if the intake/index changes drastically
+        if (vel > noteDetectVelocity && vol < noteNoneVelocity){ //threshold for "there is definitely a note in here"
             noteIn = true;
         }
         else {
@@ -85,9 +92,8 @@ public class index extends SubsystemBase{
             System.out.println(vel);
         }*/
         SmartDashboard.putNumber("IndexCurrent", vel);
-        SmartDashboard.putNumber("IntakeCurrent", m_IntakeTalon.getSupplyCurrent()); 
+        SmartDashboard.putNumber("IntakeCurrent", vol); 
         SmartDashboard.putBoolean("noteIn", noteIn);
-         
 
     }
 }

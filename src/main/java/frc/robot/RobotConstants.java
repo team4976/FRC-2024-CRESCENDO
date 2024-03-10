@@ -27,6 +27,7 @@ public static final  CommandXboxController _secondarycontroller = new CommandXbo
 public static final Servo _ratchet = new Servo(2); 
 public static final DigitalInput _elevatorLimit = new DigitalInput(0); 
 public static final DigitalInput _tiltLimit = new DigitalInput(1); 
+public static final DigitalInput _tiltUpLimit = new DigitalInput(3); 
 
 //motors n whatnot
     //shooter
@@ -53,6 +54,7 @@ public static final DigitalInput _tiltLimit = new DigitalInput(1);
     public static double shooter_position = 0;
     public static double elevator_threshold = 1;
     public static double shooter_threshold = 1;
+    public static double shooter_speed = 0.8;
     public static BooleanSupplier elevator_up = () -> m_ElevatorTalon.getSelectedSensorPosition() > elevator_threshold;
     public static BooleanSupplier tiltLimit = () -> _tiltLimit.get();
         public static final class AutoConstants { //TODO: The below constants must be tuned to the robot
