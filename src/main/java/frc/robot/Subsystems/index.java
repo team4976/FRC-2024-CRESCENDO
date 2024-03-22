@@ -14,8 +14,8 @@ public class index extends SubsystemBase{
     double vel; 
     double vol;
     //calibrated
-    double noteDetectVelocity = 10;
-    double noteNoneVelocity = 10; 
+    double noteDetectVelocity = 7;
+    double noteNoneVelocity = 7; 
 
     public index(){
 

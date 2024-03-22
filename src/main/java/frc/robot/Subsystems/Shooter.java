@@ -33,9 +33,9 @@ public class Shooter extends SubsystemBase {
 
     private final CommandXboxController m_ctrl; 
     private final GenericHID a_ctrl = new GenericHID(0);   
-    private final PIDController PIDtilt = new PIDController(0.015, 0, 0);
+    //private final PIDController PIDtilt = new PIDController(0.015, 0, 0);
 
-    double angleEn = 0; 
+    double tiltPos = 0; 
     double tiltAxis; 
     int arcTopInversed = -1; 
     int arcBottomInversed = 1;
@@ -57,12 +57,31 @@ public class Shooter extends SubsystemBase {
     }
 
     public Command shAim(double a){ //tilts to position
-        return runOnce( () -> {
-        //angleEn =  angleSpark.getEncoder().getPosition(); 
-        //m_AngleSpark.getPIDController().setReference(a, CANSparkBase.ControlType.kPosition);
-        m_AngleSpark.set(PIDtilt.calculate(m_AngleSpark.getEncoder().getPosition(), a));
+        return run( () -> {
+            if (tiltPos < (a + 2)){ //if 'low', go 'up'
+                    m_AngleSpark.set(0.4);
+                }
+            else if (tiltPos > (a - 2)){ //if 'high', go 'down'
+                    m_AngleSpark.set(-0.4);
+                }
+            else { //if it isn't outside either bound, don't move
+                m_AngleSpark.set(0);
+            }
         }); 
     }
+
+    public void shAutoAim(double b){
+        if (tiltPos < (b + 4)){ //if 'low', go 'up'
+                m_AngleSpark.set(0.3);
+            }
+        else if (tiltPos > (b - 4)){ //if 'high', go 'down'
+                m_AngleSpark.set(-0.3);
+            }
+        else { //if it isn't outside either bound, don't move
+            m_AngleSpark.set(0);
+        }
+    }
+
     //for amp shooting. runs indexer and shooter simultaneously to gently eject note
     public Command shootIndexed(){ 
         return runOnce( () -> {
@@ -177,8 +196,9 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void periodic(){
+        tiltPos = m_AngleSpark.getEncoder().getPosition();
         //SmartDashboard.putBoolean("ARCSHOOTER ACTIVE", arcActive);   
-        SmartDashboard.putNumber("SHOOTER POS", m_AngleSpark.getEncoder().getPosition());
+        SmartDashboard.putNumber("SHOOTER POS", tiltPos);
         SmartDashboard.putBoolean("TILT LIMIT", _tiltLimit.get());
         SmartDashboard.putBoolean("TILTBACK LIMIT", _tiltUpLimit.get()); 
         

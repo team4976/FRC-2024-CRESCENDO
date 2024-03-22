@@ -26,6 +26,7 @@ import frc.robot.Swerve.Subsystem.Swerve;
 import frc.robot.Swerve.commands.TeleopSwerve;
 import frc.robot.Swerve.commands.drive;
 import frc.robot.Autonomous.speakerAim;
+import frc.robot.Autonomous.speakerAimTurn;
 import frc.robot.Autonomous.actionGroups.stillshot;
 import frc.robot.Autonomous.autoexp;
 import frc.robot.Autonomous.returnauto;
@@ -79,10 +80,10 @@ SendableChooser<SequentialCommandGroup> m_Chooser = new SendableChooser<>();
   private void configureBindings() {    
 
     //ELEVATOR
-    _secondarycontroller.povDown().whileTrue(Elevator.home()); //down with stop
-    _secondarycontroller.povDown().onFalse(Elevator.stop());
-    _secondarycontroller.povUp().whileTrue(Elevator.elevate()); //up
-    _secondarycontroller.povUp().onFalse(Elevator.stop()); 
+    _secondarycontroller.rightTrigger(0.1).whileTrue(Elevator.home()); //down with stop
+    _secondarycontroller.rightTrigger(0.1).onFalse(Elevator.stop());
+    _secondarycontroller.leftTrigger(0.1).whileTrue(Elevator.elevate()); //up
+    _secondarycontroller.leftTrigger(0.1).onFalse(Elevator.stop()); 
     _secondarycontroller.rightBumper().onTrue(Elevator.ratchetToggle()); //ratchet toggle 
     _secondarycontroller.povLeft().whileTrue(Elevator.reverse()); //down no stop (in case limit breaks)
     _secondarycontroller.povLeft().onFalse(Elevator.stop()); 
@@ -94,7 +95,8 @@ SendableChooser<SequentialCommandGroup> m_Chooser = new SendableChooser<>();
     //_primarycontroller.x().onFalse(Intake.intakeManualStop());
     //_primarycontroller.a().onFalse(Intake.intakeManualStop());
 
-    //_primarycontroller.a().whileTrue(new speakerAim(s_Swerve, Shooter));
+    //AUTOAIM COMMAND
+    _primarycontroller.a().whileTrue(new speakerAimTurn(s_Swerve, Shooter));
 
     //SHOOTER-AMP 
     _primarycontroller.leftBumper().onTrue(Shooter.shootIndexed()); //runs shooter and index simultaneous
@@ -142,7 +144,9 @@ SendableChooser<SequentialCommandGroup> m_Chooser = new SendableChooser<>();
     Shooter.setDefaultCommand(Shooter.shTilt());
     new Trigger(tiltLimit).whileFalse(Shooter.encoderZero());
 
-    //_primarycontroller.povUp().onTrue(Shooter.shAim(50));
+    //TILT TO POSITION 
+    _secondarycontroller.povUp().whileTrue(Shooter.shAim(-54));
+    _secondarycontroller.povDown().whileTrue(Shooter.shAim(-2));
     
     //TELEOP SWERVE
     s_Swerve.setDefaultCommand(

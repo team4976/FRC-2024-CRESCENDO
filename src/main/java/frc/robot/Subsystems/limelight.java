@@ -55,14 +55,15 @@ public class limelight extends SubsystemBase {
         //read values periodically
         v = tv.getDouble(0.0); 
         if (v == 1){ //if no tag present, retains it's last read value. useful if read is flickering
-            x = tx.getDouble(0.0);
-            y = ty.getDouble(0.0);
+            y = tx.getDouble(0.0); //INVERTED BECAUSE THE LIMELIGHT IS TILTED
+            x = ty.getDouble(0.0);
             area = ta.getDouble(0.0);
             th = thor.getDouble(0.0);
             id = tid.getDouble(0.0); 
         }
         SmartDashboard.putNumber("LL ID", id); 
         SmartDashboard.putNumber("TARGET HOR", th);
+        SmartDashboard.putNumber("TARGET Y", y);
         SmartDashboard.putNumber("Tag?", v);
     }
 }

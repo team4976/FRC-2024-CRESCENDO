@@ -9,7 +9,7 @@ import frc.robot.Subsystems.Shooter;
 import frc.robot.Subsystems.limelight;
 import frc.robot.Subsystems.index;
 
-public class speakerAim extends Command {
+public class speakerAimTurn extends Command {
     private boolean isFinished;
     private boolean botPositioned;
     private boolean shooterAimed;
@@ -23,11 +23,9 @@ public class speakerAim extends Command {
     private Shooter a_Shooter; 
     private limelight a_l = new limelight();
     private index a_Index = new index(); 
-    PIDController pidT = new PIDController(0.015, 0, 0);
-    PIDController pidF = new PIDController(0.015, 0, 0);
-    PIDController pidH = new PIDController(0.015, 0, 0); 
+    PIDController pidT = new PIDController(0.04, 0, 0); //kp changed from 0.015
 
-    public speakerAim(Swerve s, Shooter h){
+    public speakerAimTurn(Swerve s, Shooter h){
         a_Swerve = s; 
         a_Shooter = h; 
         addRequirements(s);
@@ -42,8 +40,6 @@ public class speakerAim extends Command {
         shooterAimed = false;
         isFinished = false; //idk if i have to set it but better safe than sorry
         pidT.setTolerance(5.0);
-        pidF.setTolerance(5.0);
-        pidH.setTolerance(5.0); 
     }
 
     @Override 
@@ -73,7 +69,7 @@ public class speakerAim extends Command {
             
             if (!botPositioned){
                 //point at target and drive at it. distances changeable see setpoints
-                a_Swerve.driveLime(new Translation2d(pidF.calculate(a_l.THor(), distSetpoint), pidH.calculate(a_l.X(), hSetpoint)),
+                a_Swerve.driveLime(new Translation2d(0,0),
                 - pidT.calculate(a_l.X(), hSetpoint), false, true);
             }
             if (botPositioned){
